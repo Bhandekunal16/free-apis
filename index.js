@@ -14,14 +14,13 @@ app.get("", (_, res) => {
 });
 
 app.get("/fake/:type", async (req, res) => {
-  const data = await fakeData.init(req.params.type);
-  res.status(data?.length ? 200 : 404).json({
-    ...data,
-    statusCode: data?.length ? 200 : 404,
-    status: data?.length ? true : false,
+  const data = await fakeData.init({
+    type: req.params.type,
+    query: req.query,
   });
-});
 
+  res.status(data.statusCode).json(data);
+});
 app.get("/fake/:type/:id", async (req, res) => {
   const data = await fakeData.init({
     type: req.params.type,
