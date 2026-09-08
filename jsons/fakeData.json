@@ -1,0 +1,9 @@
+{
+  "tags": ["users", "posts", "comments", "albums", "todos", "photos"],
+  "timeout": 8000,
+
+  "cache": {
+    "enabled": true,
+    "ttl": 30000
+  }
+}

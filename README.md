@@ -1,0 +1,376 @@
+# Free APIs
+
+A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
+
+The project currently provides two API groups:
+
+* **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
+* **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
+
+The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
+
+---
+
+## Features
+
+* Express-based HTTP server
+* Free public API integration
+* Unified local API endpoints
+* Resource validation
+* ID-based resource access
+* Nested resource access
+* Query parameter forwarding
+* JSON and binary response handling
+* Request timeout protection
+* Optional in-memory caching
+* HTTP status propagation
+* Centralized service logic
+* Simple configuration through JSON files
+* No database required
+
+---
+
+## Requirements
+
+* Node.js 18+
+* npm
+
+Node.js 18+ is recommended because the project uses the native `fetch()` API.
+
+---
+
+## Installation
+
+Clone the repository and install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## Configuration
+
+Application configuration is stored in:
+
+```text
+jsons/app.json
+```
+
+Example:
+
+```json
+{
+  "host": "localhost",
+  "port": 3000
+}
+```
+
+### External APIs
+
+External API URLs are configured in:
+
+```text
+jsons/routes.json
+```
+
+Example:
+
+```json
+{
+  "fakeData": "https://jsonplaceholder.typicode.com",
+  "mockData": "https://dummyjson.com"
+}
+```
+
+---
+
+## Project Structure
+
+```text
+free-apis/
+│
+├── jsons/
+│   ├── app.json
+│   ├── routes.json
+│   ├── fakeData.json
+│   └── mockData.json
+│
+├── fakeData.js
+├── mockData.js
+├── index.js
+├── package.json
+└── README.md
+```
+
+---
+
+## Running the Server
+
+Start the application:
+
+```bash
+node index.js
+```
+
+The server will listen on the configured host and port.
+
+Example:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Health Check
+
+Request:
+
+```http
+GET /
+```
+
+Response:
+
+```text
+hello world!
+```
+
+---
+
+# API Groups
+
+## Fake API
+
+The `/fake` endpoints consume data from JSONPlaceholder.
+
+Available resources:
+
+```text
+users
+posts
+comments
+albums
+todos
+photos
+```
+
+Examples:
+
+```http
+GET /fake/users
+GET /fake/users/1
+GET /fake/posts
+GET /fake/posts/1
+GET /fake/posts/1/comments
+GET /fake/users/1/posts
+```
+
+Query parameters are forwarded to the upstream API.
+
+Example:
+
+```http
+GET /fake/posts?userId=1
+```
+
+---
+
+## Mock API
+
+The `/mock` endpoints consume data from DummyJSON.
+
+Available resources depend on:
+
+```text
+jsons/mockData.json
+```
+
+Example resources:
+
+```text
+products
+carts
+users
+posts
+comments
+quotes
+todos
+recipes
+ip
+image
+```
+
+Examples:
+
+```http
+GET /mock/products
+GET /mock/products/1
+GET /mock/users
+GET /mock/users/1
+GET /mock/posts
+```
+
+Query parameters can be forwarded to the upstream API:
+
+```http
+GET /mock/products?limit=10
+GET /mock/products?skip=10&limit=10
+GET /mock/products?sortBy=price&order=asc
+```
+
+---
+
+# Request Flow
+
+A request follows this flow:
+
+```text
+Client
+  │
+  ▼
+Express Router
+  │
+  ▼
+Controller
+  │
+  ▼
+Service
+  │
+  ├── Validate resource
+  │
+  ├── Build upstream URL
+  │
+  ├── Check cache
+  │
+  ├── Fetch external API
+  │
+  ├── Parse response
+  │
+  └── Construct response
+  │
+  ▼
+Client
+```
+
+---
+
+# Error Handling
+
+Invalid resources return a `400` response.
+
+Example:
+
+```http
+GET /fake/invalid
+```
+
+Response:
+
+```json
+{
+  "success": false,
+  "statusCode": 400,
+  "status": false,
+  "message": "Invalid resource 'invalid'"
+}
+```
+
+If an upstream API returns an error, the upstream HTTP status is propagated where possible.
+
+---
+
+# Response Types
+
+The service supports:
+
+* JSON
+* text
+* HTML
+* XML
+* binary data
+* images
+* PDFs
+* other `application/octet-stream` responses
+
+JSON responses are returned as JavaScript objects/arrays.
+
+Binary responses are represented internally as Node.js `Buffer` objects.
+
+---
+
+# Performance
+
+The service is designed to minimize unnecessary upstream requests.
+
+Where enabled, responses are cached in memory:
+
+```text
+Request
+   │
+   ▼
+Cache
+ ┌─┴──────────────┐
+ │                │
+Hit              Miss
+ │                │
+ ▼                ▼
+Response       External API
+                  │
+                  ▼
+                Cache
+```
+
+Cache configuration is controlled by the service configuration.
+
+---
+
+# Security Considerations
+
+This service is intended primarily for development, testing, learning, and API experimentation.
+
+Before exposing it publicly, consider adding:
+
+* authentication
+* rate limiting
+* request size limits
+* CORS configuration
+* upstream allowlists
+* logging
+* API keys where required
+* cache size limits
+* request validation
+
+---
+
+# Development
+
+The project intentionally keeps controllers thin and moves API logic into service classes.
+
+Recommended separation:
+
+```text
+Controller
+    ↓
+Service
+    ↓
+External API
+```
+
+Controllers should handle HTTP concerns.
+
+Services should handle:
+
+* validation
+* URL construction
+* HTTP requests
+* response parsing
+* caching
+* error handling
+
+---
+
+# License
+
+Use and modify this project according to the license included with the repository.

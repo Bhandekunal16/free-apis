@@ -1,0 +1,15 @@
+{
+  "params": [
+    "products",
+    "carts",
+    "users",
+    "posts",
+    "comments",
+    "quotes",
+    "todos",
+    "recipes",
+    "ip",
+    "image"
+  ],
+  "filters": ["limit", "skip", "select", "sortBy", "order", "delay"]
+}
