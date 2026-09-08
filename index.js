@@ -21,6 +21,7 @@ app.get("/fake/:type", async (req, res) => {
 
   res.status(data.statusCode).json(data);
 });
+
 app.get("/fake/:type/:id", async (req, res) => {
   const data = await fakeData.init({
     type: req.params.type,
