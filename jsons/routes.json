@@ -1,4 +1,5 @@
 {
   "fakeData": "https://jsonplaceholder.typicode.com",
-  "mockData": "https://dummyjson.com"
+  "mockData": "https://dummyjson.com",
+  "openMeteo": "https://api.open-meteo.com"
 }

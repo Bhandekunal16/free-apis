@@ -2,9 +2,11 @@ const express = require("express");
 const { host, port } = require("./jsons/app.json");
 const faker = require("./fakeData");
 const mock = require("./mockData");
+const OpenMeteo = require("./OpenMeteo");
 
 const fakeData = new faker();
 const mockData = new mock();
+const openMeteo = new OpenMeteo();
 
 const app = express();
 app.use(express.json());
@@ -56,6 +58,44 @@ app.get("/mock/:type/:id", async (req, res) => {
     type: req.params.type,
     id: req.params.id,
     query: req.query,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/weather", async (req, res) => {
+  const {
+    latitude,
+    longitude,
+
+    current,
+    hourly,
+    daily,
+
+    timezone,
+    forecastDays,
+    pastDays,
+
+    temperatureUnit,
+    windSpeedUnit,
+    precipitationUnit,
+  } = req.query;
+
+  const data = await openMeteo.init({
+    latitude,
+    longitude,
+
+    current,
+    hourly,
+    daily,
+
+    timezone,
+    forecastDays,
+    pastDays,
+
+    temperatureUnit,
+    windSpeedUnit,
+    precipitationUnit,
   });
 
   res.status(data.statusCode ?? 200).json(data);

@@ -333,7 +333,83 @@ GET /mock/products?limit=10&skip=20&sortBy=price&order=desc
 
 ---
 
-# 4. HTTP Status Codes
+# 4. Weather API
+
+The Weather API provides access to Open-Meteo forecast data.
+
+Configured upstream API:
+
+```text
+https://api.open-meteo.com
+```
+
+---
+
+## Get Weather Forecast
+
+```http
+GET /weather
+```
+
+### Required Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `latitude` | Yes | Latitude in decimal degrees (`-90` to `90`) |
+| `longitude` | Yes | Longitude in decimal degrees (`-180` to `180`) |
+
+### Optional Query Parameters
+
+| Parameter | Description |
+| --------- | ----------- |
+| `current` | Current weather variables to return |
+| `hourly` | Hourly weather variables to return |
+| `daily` | Daily weather variables to return |
+| `timezone` | Timezone for timestamps, default `auto` |
+| `forecastDays` | Number of forecast days |
+| `pastDays` | Number of past days to include |
+| `temperatureUnit` | Temperature unit (`celsius`, `fahrenheit`) |
+| `windSpeedUnit` | Wind speed unit (`kmh`, `mph`, `ms`, `kn`) |
+| `precipitationUnit` | Precipitation unit (`mm`, `inch`) |
+
+### Example
+
+```http
+GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max&forecastDays=3&timezone=auto
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "contentType": "application/json",
+  "url": "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m%2Cweather_code&hourly=temperature_2m&daily=temperature_2m_max&forecast_days=3&timezone=auto",
+  "data": {
+    "latitude": 52.52,
+    "longitude": 13.41,
+    "timezone": "auto",
+    "current": {
+      "time": "2026-09-08T12:00",
+      "temperature_2m": 21.4,
+      "weather_code": 1
+    },
+    "hourly": {
+      "time": ["2026-09-08T13:00"],
+      "temperature_2m": [21.6]
+    },
+    "daily": {
+      "time": ["2026-09-08"],
+      "temperature_2m_max": [22.1]
+    }
+  }
+}
+```
+
+---
+
+# 5. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -346,7 +422,7 @@ GET /mock/products?limit=10&skip=20&sortBy=price&order=desc
 
 ---
 
-# 5. Error Response
+# 6. Error Response
 
 Example:
 
@@ -355,13 +431,13 @@ Example:
   "success": false,
   "statusCode": 400,
   "status": false,
-  "message": "Invalid resource 'customers'"
+  "message": "latitude is required"
 }
 ```
 
 ---
 
-# 6. Request Examples
+# 7. Request Examples
 
 ## Fake users
 
@@ -411,9 +487,15 @@ curl "http://localhost:3000/mock/products?limit=10&skip=20"
 curl "http://localhost:3000/mock/products?sortBy=price&order=asc"
 ```
 
+## Weather forecast
+
+```bash
+curl "http://localhost:3000/weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max&forecastDays=3"
+```
+
 ---
 
-# 7. Route Summary
+# 8. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -423,6 +505,7 @@ curl "http://localhost:3000/mock/products?sortBy=price&order=asc"
 | `GET`  | `/fake/:type/:id/:subtype` | Fake API nested resource |
 | `GET`  | `/mock/:type`              | Mock API collection      |
 | `GET`  | `/mock/:type/:id`          | Mock API resource        |
+| `GET`  | `/weather`                 | Weather forecast         |
 
 All currently supported endpoints are read-only.
 

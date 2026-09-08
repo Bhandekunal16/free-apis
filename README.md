@@ -2,10 +2,11 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides two API groups:
+The project currently provides three API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
+* **Weather API** — consumes [Open-Meteo](https://open-meteo.com/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -16,6 +17,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Express-based HTTP server
 * Free public API integration
 * Unified local API endpoints
+* Weather API integration via Open-Meteo
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -79,7 +81,8 @@ Example:
 ```json
 {
   "fakeData": "https://jsonplaceholder.typicode.com",
-  "mockData": "https://dummyjson.com"
+  "mockData": "https://dummyjson.com",
+  "openMeteo": "https://api.open-meteo.com"
 }
 ```
 
@@ -94,13 +97,18 @@ free-apis/
 │   ├── app.json
 │   ├── routes.json
 │   ├── fakeData.json
-│   └── mockData.json
+│   ├── mockData.json
+│   └── openMeteo.json
 │
 ├── fakeData.js
 ├── mockData.js
+├── OpenMeteo.js
 ├── index.js
 ├── package.json
-└── README.md
+├── README.md
+├── API.md
+├── FUNCTION.md
+└── .gitignore
 ```
 
 ---
@@ -218,6 +226,63 @@ Query parameters can be forwarded to the upstream API:
 GET /mock/products?limit=10
 GET /mock/products?skip=10&limit=10
 GET /mock/products?sortBy=price&order=asc
+```
+
+---
+
+## Weather API
+
+The `/weather` endpoint consumes data from Open-Meteo.
+
+Required query parameters:
+
+```text
+latitude
+longitude
+```
+
+Optional query parameters:
+
+```text
+current
+hourly
+daily
+timezone
+forecastDays
+pastDays
+temperatureUnit
+windSpeedUnit
+precipitationUnit
+```
+
+Example request:
+
+```http
+GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max&forecastDays=3&timezone=auto
+```
+
+Example response:
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "data": {
+    "latitude": 52.52,
+    "longitude": 13.41,
+    "timezone": "auto",
+    "current": {
+      "time": "2026-09-08T12:00",
+      "temperature_2m": 21.4,
+      "weather_code": 1
+    },
+    "hourly": {
+      "time": ["2026-09-08T13:00"],
+      "temperature_2m": [21.6]
+    }
+  }
+}
+```
 ```
 
 ---

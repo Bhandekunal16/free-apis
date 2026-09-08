@@ -17,13 +17,21 @@ Express
    │       ▼
    │    JSONPlaceholder
    │
-   └── /mock/*
+   ├── /mock/*
+   │       │
+   │       ▼
+   │    MockData
+   │       │
+   │       ▼
+   │    DummyJSON
+   │
+   └── /weather
            │
            ▼
-        MockData
+        OpenMeteo
            │
            ▼
-        DummyJSON
+        Open-Meteo API
 ```
 
 The application follows a simple controller/service architecture.
