@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors')
 const { host, port } = require("./jsons/app.json");
 const faker = require("./fakeData");
 const mock = require("./mockData");
@@ -12,6 +13,7 @@ const openMeteo = new OpenMeteo();
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 app.get("", (_, res) => {
   res.status(200).send("hello world!");
