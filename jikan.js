@@ -139,6 +139,7 @@ class Jikan {
         contentType,
         url: requestUrl,
         data,
+        upstream: "Jikan",
       };
     }
 
