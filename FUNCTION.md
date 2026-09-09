@@ -32,6 +32,14 @@ Express
            │
            ▼
         Open-Meteo API
+
+   /countries
+           │
+           ▼
+     RestCountries
+           │
+           ▼
+     REST Countries API
 ```
 
 The application follows a simple controller/service architecture.
@@ -410,6 +418,69 @@ console.log(
   fakeData.getCacheSize()
 );
 ```
+
+---
+
+# RestCountries Service
+
+File:
+
+```text
+restCountries.js
+```
+
+Class:
+
+```js
+RestCountries
+```
+
+The RestCountries service consumes REST Countries and supports the following
+lookup types:
+
+```text
+all
+name
+code
+currency
+lang
+capital
+region
+subregion
+```
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the REST Countries endpoint, validates the lookup type and required
+value, forwards query parameters, and returns a standardized response.
+
+Example:
+
+```js
+await restCountries.init({
+  type: "name",
+  value: "india",
+  query: {
+    fields: "name,capital,flags"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /countries?type=name&value=india&fields=name,capital,flags
+```
+
+`all` is the default type and does not require a value. Every other type
+requires `value`; unsupported types return `400`.
+
+The service uses `AbortController` for the default 10-second timeout and
+parses JSON, text, and binary upstream responses.
 
 ---
 

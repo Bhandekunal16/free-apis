@@ -3,7 +3,9 @@ const { host, port } = require("./jsons/app.json");
 const faker = require("./fakeData");
 const mock = require("./mockData");
 const OpenMeteo = require("./OpenMeteo");
+const RestCountries = require("./restCountries");
 
+const restCountries = new RestCountries();
 const fakeData = new faker();
 const mockData = new mock();
 const openMeteo = new OpenMeteo();
@@ -96,6 +98,18 @@ app.get("/weather", async (req, res) => {
     temperatureUnit,
     windSpeedUnit,
     precipitationUnit,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/countries", async (req, res) => {
+  const data = await restCountries.init({
+    type: req.query.type ?? "all",
+    value: req.query.value,
+    query: {
+      fields: req.query.fields,
+    },
   });
 
   res.status(data.statusCode ?? 200).json(data);

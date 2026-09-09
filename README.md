@@ -2,11 +2,12 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides three API groups:
+The project currently provides four API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
 * **Weather API** — consumes [Open-Meteo](https://open-meteo.com/)
+* **Countries API** — consumes [REST Countries](https://restcountries.com/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -18,6 +19,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Free public API integration
 * Unified local API endpoints
 * Weather API integration via Open-Meteo
+* Country and region data via REST Countries
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -82,7 +84,8 @@ Example:
 {
   "fakeData": "https://jsonplaceholder.typicode.com",
   "mockData": "https://dummyjson.com",
-  "openMeteo": "https://api.open-meteo.com"
+  "openMeteo": "https://api.open-meteo.com",
+  "restcountries": "https://restcountries.com"
 }
 ```
 
@@ -98,7 +101,8 @@ free-apis/
 │   ├── routes.json
 │   ├── fakeData.json
 │   ├── mockData.json
-│   └── openMeteo.json
+│   ├── openMeteo.json
+│   └── restCountries.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -226,6 +230,37 @@ Query parameters can be forwarded to the upstream API:
 GET /mock/products?limit=10
 GET /mock/products?skip=10&limit=10
 GET /mock/products?sortBy=price&order=asc
+```
+
+---
+
+## Countries API
+
+The `/countries` endpoint consumes country data from REST Countries.
+
+The endpoint supports these lookup types:
+
+```text
+all
+name
+code
+currency
+lang
+capital
+region
+subregion
+```
+
+Use `type` to select a lookup and `value` for every type except `all`.
+The optional `fields` parameter limits the fields returned by REST Countries.
+
+Examples:
+
+```http
+GET /countries
+GET /countries?type=name&value=india
+GET /countries?type=code&value=IN
+GET /countries?type=region&value=asia&fields=name,capital,flags
 ```
 
 ---

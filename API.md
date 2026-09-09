@@ -333,7 +333,72 @@ GET /mock/products?limit=10&skip=20&sortBy=price&order=desc
 
 ---
 
-# 4. Weather API
+# 4. Countries API
+
+The Countries API provides access to country data from REST Countries.
+
+Configured upstream API:
+
+```text
+https://restcountries.com
+```
+
+## Get Countries
+
+```http
+GET /countries
+```
+
+The default request uses the `all` lookup and returns all available countries.
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Lookup type: `all`, `name`, `code`, `currency`, `lang`, `capital`, `region`, or `subregion`; defaults to `all` |
+| `value` | Conditional | Lookup value; required when `type` is not `all` |
+| `fields` | No | Comma-separated list of fields to return |
+
+### Examples
+
+```http
+GET /countries
+```
+
+```http
+GET /countries?type=name&value=india
+```
+
+```http
+GET /countries?type=code&value=IN&fields=name,capital,flags
+```
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "contentType": "application/json",
+  "url": "https://restcountries.com/v3.1/name/india",
+  "data": [
+    {
+      "name": {
+        "common": "India",
+        "official": "Republic of India"
+      },
+      "capital": ["New Delhi"],
+      "region": "Asia"
+    }
+  ]
+}
+```
+
+An invalid lookup type or a missing required value returns `400`.
+
+---
+
+# 5. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -409,7 +474,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 5. HTTP Status Codes
+# 6. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -422,7 +487,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 6. Error Response
+# 7. Error Response
 
 Example:
 
@@ -437,7 +502,7 @@ Example:
 
 ---
 
-# 7. Request Examples
+# 8. Request Examples
 
 ## Fake users
 
@@ -493,9 +558,15 @@ curl "http://localhost:3000/mock/products?sortBy=price&order=asc"
 curl "http://localhost:3000/weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&hourly=temperature_2m&daily=temperature_2m_max&forecastDays=3"
 ```
 
+## Countries by name
+
+```bash
+curl "http://localhost:3000/countries?type=name&value=india"
+```
+
 ---
 
-# 8. Route Summary
+# 9. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -506,6 +577,7 @@ curl "http://localhost:3000/weather?latitude=52.52&longitude=13.41&current=tempe
 | `GET`  | `/mock/:type`              | Mock API collection      |
 | `GET`  | `/mock/:type/:id`          | Mock API resource        |
 | `GET`  | `/weather`                 | Weather forecast         |
+| `GET`  | `/countries`               | Country lookup           |
 
 All currently supported endpoints are read-only.
 
