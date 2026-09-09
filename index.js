@@ -7,6 +7,7 @@ const OpenMeteo = require("./OpenMeteo");
 const RestCountries = require("./restCountries");
 const Pokemon = require("./pokemon");
 const RickAndMorty = require("./rickAndMorty");
+const CatFacts = require("./catFacts");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -14,6 +15,7 @@ const mockData = new mock();
 const openMeteo = new OpenMeteo();
 const pokemon = new Pokemon();
 const rickAndMorty = new RickAndMorty();
+const catFacts = new CatFacts();
 
 const app = express();
 app.use(express.json());
@@ -144,6 +146,17 @@ app.get("/rick-and-morty", async (req, res) => {
     type: resource,
     value,
     id,
+    query,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/cat-facts", async (req, res) => {
+  const { type = "fact", ...query } = req.query;
+
+  const data = await catFacts.init({
+    type,
     query,
   });
 

@@ -1,0 +1,7 @@
+{
+  "defaultTimeout": 10000,
+  "endpoints": {
+    "fact": "/fact",
+    "facts": "/facts"
+  }
+}

@@ -511,7 +511,53 @@ upstream errors and timeouts are propagated as documented below.
 
 ---
 
-# 7. Weather API
+# 7. Cat Facts API
+
+The Cat Facts API provides random cat facts and collections of cat facts.
+
+Configured upstream API:
+
+```text
+https://catfact.ninja
+```
+
+## Get Cat Facts
+
+```http
+GET /cat-facts
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Response type: `fact` or `facts`; defaults to `fact` |
+| `max_length` | No | Maximum length for a single fact |
+| `limit` | No | Number of facts for the `facts` response |
+| `page` | No | Page number for the `facts` response |
+
+Additional query parameters are forwarded to the upstream API.
+
+### Examples
+
+```http
+GET /cat-facts
+```
+
+```http
+GET /cat-facts?type=facts&limit=10
+```
+
+```http
+GET /cat-facts?type=fact&max_length=140
+```
+
+The default response type is `fact`. Invalid response types return `400`;
+upstream errors and timeouts are propagated as documented below.
+
+---
+
+# 8. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -587,7 +633,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 8. HTTP Status Codes
+# 9. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -600,7 +646,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 9. Error Response
+# 10. Error Response
 
 Example:
 
@@ -615,7 +661,7 @@ Example:
 
 ---
 
-# 10. Request Examples
+# 11. Request Examples
 
 ## Fake users
 
@@ -701,9 +747,21 @@ curl "http://localhost:3000/rick-and-morty?resource=character&value=2"
 curl "http://localhost:3000/rick-and-morty?resource=character&name=rick&status=alive"
 ```
 
+## Cat fact
+
+```bash
+curl http://localhost:3000/cat-facts
+```
+
+## Cat facts list
+
+```bash
+curl "http://localhost:3000/cat-facts?type=facts&limit=10"
+```
+
 ---
 
-# 11. Route Summary
+# 12. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -717,6 +775,7 @@ curl "http://localhost:3000/rick-and-morty?resource=character&name=rick&status=a
 | `GET`  | `/countries`               | Country lookup           |
 | `GET`  | `/pokemon`                 | Pokémon resource lookup  |
 | `GET`  | `/rick-and-morty`          | Rick and Morty lookup    |
+| `GET`  | `/cat-facts`               | Cat facts lookup         |
 
 All currently supported endpoints are read-only.
 

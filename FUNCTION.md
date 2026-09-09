@@ -56,6 +56,14 @@ Express
            │
            ▼
      Rick and Morty API
+
+    /cat-facts
+           │
+           ▼
+         CatFacts
+           │
+           ▼
+       Cat Facts API
 ```
 
 The application follows a simple controller/service architecture.
@@ -609,6 +617,60 @@ GET /rick-and-morty?resource=character&value=2&name=rick&status=alive
 The route defaults `resource` to `character`. The service uses
 `AbortController` for the configured 10-second timeout and parses JSON, text,
 and binary upstream responses.
+
+---
+
+# CatFacts Service
+
+File:
+
+```text
+catFacts.js
+```
+
+Class:
+
+```js
+CatFacts
+```
+
+The CatFacts service consumes the Cat Facts API resources configured in:
+
+```text
+jsons/catFacts.json
+```
+
+Supported resource types are `fact` and `facts`.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream resource URL, forwards query parameters, and returns a
+standardized response.
+
+Example:
+
+```js
+await catFacts.init({
+  type: "facts",
+  query: {
+    limit: 10
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /cat-facts?type=facts&limit=10
+```
+
+The route defaults `type` to `fact`. Unsupported types return `400`. The
+service uses `AbortController` for the configured 10-second timeout and parses
+JSON, text, and binary upstream responses.
 
 ---
 

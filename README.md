@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides six API groups:
+The project currently provides seven API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -10,6 +10,7 @@ The project currently provides six API groups:
 * **Countries API** — consumes [REST Countries](https://restcountries.com/)
 * **Pokémon API** — consumes [PokéAPI](https://pokeapi.co/)
 * **Rick and Morty API** — consumes [Rick and Morty API](https://rickandmortyapi.com/)
+* **Cat Facts API** — consumes [Cat Facts](https://catfact.ninja/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -24,6 +25,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Country and region data via REST Countries
 * Pokémon data and resource lookups via PokéAPI
 * Rick and Morty character, location, and episode lookups
+* Cat fact retrieval
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -91,7 +93,8 @@ Example:
   "openMeteo": "https://api.open-meteo.com",
   "restcountries": "https://api.restcountries.com",
   "pokemon": "https://pokeapi.co/api/v2",
-  "rickAndMorty": "https://rickandmortyapi.com/api"
+  "rickAndMorty": "https://rickandmortyapi.com/api",
+  "catFacts": "https://catfact.ninja"
 }
 ```
 
@@ -110,7 +113,8 @@ free-apis/
 │   ├── openMeteo.json
 │   ├── restCountries.json
 │   ├── pokemon.json
-│   └── rickAndMorty.json
+│   ├── rickAndMorty.json
+│   └── catFacts.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -118,6 +122,7 @@ free-apis/
 ├── restCountries.js
 ├── pokemon.js
 ├── rickAndMorty.js
+├── catFacts.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -351,6 +356,31 @@ GET /rick-and-morty?resource=episode&value=1
 ```
 
 The default resource is `character`.
+
+---
+
+## Cat Facts API
+
+The `/cat-facts` endpoint consumes data from the Cat Facts API.
+
+The `type` parameter selects the response format:
+
+```text
+fact
+facts
+```
+
+The default type is `fact`. Additional query parameters are forwarded to the
+upstream API, such as `max_length` for a single fact or `limit` for a list of
+facts.
+
+Examples:
+
+```http
+GET /cat-facts
+GET /cat-facts?type=facts&limit=10
+GET /cat-facts?type=fact&max_length=140
+```
 
 ---
 
