@@ -1,0 +1,22 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "user": "/users/{username}",
+    "users": "/users",
+    "repos": "/repos/{owner}/{repo}",
+    "userRepos": "/users/{username}/repos",
+    "repoIssues": "/repos/{owner}/{repo}/issues",
+    "repoPulls": "/repos/{owner}/{repo}/pulls",
+    "repoCommits": "/repos/{owner}/{repo}/commits",
+    "repoBranches": "/repos/{owner}/{repo}/branches",
+    "repoReleases": "/repos/{owner}/{repo}/releases",
+    "repoTags": "/repos/{owner}/{repo}/tags",
+    "repoLanguages": "/repos/{owner}/{repo}/languages",
+    "repoContributors": "/repos/{owner}/{repo}/contributors",
+    "repoContents": "/repos/{owner}/{repo}/contents",
+    "searchRepositories": "/search/repositories",
+    "searchUsers": "/search/users",
+    "searchIssues": "/search/issues",
+    "searchCommits": "/search/commits"
+  }
+}

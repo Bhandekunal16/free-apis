@@ -898,7 +898,57 @@ missing `name` may result in an upstream validation error.
 
 ---
 
-# 15. Weather API
+# 15. GitHub API
+
+The GitHub API provides read-only access to users, repositories, searches, and
+repository metadata.
+
+Configured upstream API:
+
+```text
+https://api.github.com
+```
+
+## Supported Types
+
+| Type | Required parameters | Description |
+| ---- | ------------------- | ----------- |
+| `user` | `username` or `value` | Get one user |
+| `users` | None | List users |
+| `repos` | `owner`, `repo` | Get repository details |
+| `userRepos` | `username` or `value` | List a user's repositories |
+| `repoIssues` | `owner`, `repo` | List repository issues |
+| `repoPulls` | `owner`, `repo` | List pull requests |
+| `repoCommits` | `owner`, `repo` | List commits |
+| `repoBranches` | `owner`, `repo` | List branches |
+| `repoReleases` | `owner`, `repo` | List releases |
+| `repoTags` | `owner`, `repo` | List tags |
+| `repoLanguages` | `owner`, `repo` | Get repository languages |
+| `repoContributors` | `owner`, `repo` | List contributors |
+| `repoContents` | `owner`, `repo` | Get repository contents |
+| `searchRepositories` | Query `q` | Search repositories |
+| `searchUsers` | Query `q` | Search users |
+| `searchIssues` | Query `q` | Search issues |
+| `searchCommits` | Query `q` | Search commits |
+
+## Examples
+
+```http
+GET /github
+GET /github?type=user&username=octocat
+GET /github?type=repos&owner=octocat&repo=Hello-World
+GET /github?type=searchRepositories&q=javascript
+GET /github?type=repoIssues&owner=octocat&repo=Hello-World&state=open
+```
+
+The default type is `users`. Invalid types or missing path parameters return
+`400`. Query parameters are forwarded to GitHub. Set the `GITHUB_TOKEN`
+environment variable to authenticate requests and increase rate limits.
+Requests use a 15-second timeout.
+
+---
+
+# 16. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -974,7 +1024,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 16. HTTP Status Codes
+# 17. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -987,7 +1037,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 17. Error Response
+# 18. Error Response
 
 Example:
 
@@ -1002,7 +1052,7 @@ Example:
 
 ---
 
-# 18. Request Examples
+# 19. Request Examples
 
 ## Fake users
 
@@ -1178,9 +1228,26 @@ curl "http://localhost:3000/nationalize?name=michael"
 curl "http://localhost:3000/nationalize?name=emma&country_id=US"
 ```
 
----
+## GitHub user
 
-# 19. Route Summary
+```bash
+curl "http://localhost:3000/github?type=user&username=octocat"
+```
+
+## GitHub repository
+
+```bash
+curl "http://localhost:3000/github?type=repos&owner=octocat&repo=Hello-World"
+```
+
+## GitHub repository search
+
+```bash
+curl "http://localhost:3000/github?type=searchRepositories&q=javascript"
+```
+
+---
+# 20. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1202,6 +1269,7 @@ curl "http://localhost:3000/nationalize?name=emma&country_id=US"
 | `GET`  | `/agify`                   | Age prediction         |
 | `GET`  | `/genderize`               | Gender prediction      |
 | `GET`  | `/nationalize`              | Nationality prediction |
+| `GET`  | `/github`                  | GitHub API lookup      |
 
 All currently supported endpoints are read-only.
 

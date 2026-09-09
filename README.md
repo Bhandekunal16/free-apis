@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides fourteen API groups:
+The project currently provides fifteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -18,6 +18,7 @@ The project currently provides fourteen API groups:
 * **Agify API** — consumes [Agify](https://agify.io/)
 * **Genderize API** — consumes [Genderize](https://genderize.io/)
 * **Nationalize API** — consumes [Nationalize](https://nationalize.io/)
+* **GitHub API** — consumes [GitHub REST API](https://docs.github.com/en/rest)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -40,6 +41,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Age prediction from names via Agify
 * Gender prediction from names via Genderize
 * Nationality prediction from names via Nationalize
+* GitHub users, repositories, searches, and repository metadata
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -115,7 +117,8 @@ Example:
   "ipify": "https://api.ipify.org",
   "agify": "https://api.agify.io",
   "genderize": "https://api.genderize.io",
-  "nationalize": "https://api.nationalize.io"
+  "nationalize": "https://api.nationalize.io",
+  "github": "https://api.github.com"
 }
 ```
 
@@ -142,7 +145,8 @@ free-apis/
 │   ├── ipify.json
 │   ├── agify.json
 │   ├── genderize.json
-│   └── nationalize.json
+│   ├── nationalize.json
+│   └── github.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -158,6 +162,7 @@ free-apis/
 ├── agify.js
 ├── genderize.js
 ├── nationalize.js
+├── github.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -614,6 +619,34 @@ Examples:
 GET /nationalize?name=michael
 GET /nationalize?type=nationality&name=emma&country_id=US
 ```
+
+---
+
+## GitHub API
+
+The `/github` endpoint provides read-only access to GitHub users, repositories,
+search endpoints, and repository metadata.
+
+The default type is `users`. Supported types are:
+
+```text
+user, users, repos, userRepos, repoIssues, repoPulls, repoCommits,
+repoBranches, repoReleases, repoTags, repoLanguages, repoContributors,
+repoContents, searchRepositories, searchUsers, searchIssues, searchCommits
+```
+
+Examples:
+
+```http
+GET /github
+GET /github?type=user&username=octocat
+GET /github?type=repos&owner=octocat&repo=Hello-World
+GET /github?type=searchRepositories&q=javascript
+GET /github?type=repoIssues&owner=octocat&repo=Hello-World&state=open
+```
+
+Repository and user path values are URL-encoded. Query parameters are forwarded
+to GitHub. Set `GITHUB_TOKEN` to authenticate requests and increase rate limits.
 
 ---
 

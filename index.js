@@ -14,7 +14,8 @@ const Coingecko = require("./coingecko");
 const Ipify = require("./ipify");
 const Agify = require("./agify");
 const Genderize = require("./genderize");
-const Nationalize = require("./nationalize")
+const Nationalize = require("./nationalize");
+const Github = require('./github')
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -29,7 +30,8 @@ const coingecko = new Coingecko();
 const ipify = new Ipify();
 const agify = new Agify();
 const genderize = new Genderize();
-const nationalize = new Nationalize()
+const nationalize = new Nationalize();
+const github = new Github()
 
 const app = express();
 app.use(express.json());
@@ -250,6 +252,21 @@ app.get("/nationalize", async (req, res) => {
 
   const data = await nationalize.init({
     type,
+    query,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/github", async (req, res) => {
+  const { type = "users", value, owner, repo, username, ...query } = req.query;
+
+  const data = await github.init({
+    type,
+    value,
+    owner,
+    repo,
+    username,
     query,
   });
 

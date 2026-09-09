@@ -120,6 +120,14 @@ Express
            │
            ▼
        Nationalize API
+
+     /github
+           │
+           ▼
+         GitHub
+           │
+           ▼
+       GitHub REST API
 ```
 
 The application follows a simple controller/service architecture.
@@ -1118,6 +1126,65 @@ GET /nationalize?type=nationality&name=michael&country_id=US
 The route defaults `type` to `nationality`. Unsupported types return `400`.
 The service uses `AbortController` for the configured 10-second timeout and
 parses JSON, text, and binary upstream responses.
+
+---
+
+# GitHub Service
+
+File:
+
+```text
+github.js
+```
+
+Class:
+
+```js
+GitHub
+```
+
+The GitHub service consumes the endpoint mappings configured in:
+
+```text
+jsons/github.json
+```
+
+Supported operations include user, repository, search, issue, pull request,
+commit, branch, release, tag, language, contributor, and content lookups.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, substitutes `username`, `owner`, `repo`, or
+`value` path parameters, forwards query parameters, performs the upstream
+request, and returns a standardized response.
+
+Example:
+
+```js
+await github.init({
+  type: "repos",
+  owner: "octocat",
+  repo: "Hello-World",
+  query: {
+    per_page: 10
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /github?type=repos&owner=octocat&repo=Hello-World&per_page=10
+```
+
+The route defaults `type` to `users`. Invalid types and missing required path
+parameters return `400`. The service sends GitHub's recommended media type and
+API version headers, optionally uses `GITHUB_TOKEN`, applies a configured
+15-second timeout, and parses JSON, text, and binary upstream responses.
 
 ---
 
