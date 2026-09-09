@@ -1,0 +1,34 @@
+{
+  "defaultTimeout": 15000,
+  "key": "",
+  "endpoints": {
+    "ping": "/ping",
+
+    "simplePrice": "/simple/price",
+
+    "coins": "/coins/list",
+    "coin": "/coins/{id}",
+    "coinMarkets": "/coins/markets",
+
+    "trending": "/search/trending",
+    "search": "/search",
+
+    "global": "/global",
+    "globalDefi": "/global/decentralized_finance_defi",
+
+    "categories": "/coins/categories",
+    "categoriesList": "/coins/categories/list",
+
+    "exchanges": "/exchanges",
+    "exchange": "/exchanges/{id}",
+    "exchangeTickers": "/exchanges/{id}/tickers",
+
+    "derivatives": "/derivatives",
+    "derivativesExchanges": "/derivatives/exchanges",
+
+    "assetPlatforms": "/asset_platforms",
+
+    "nfts": "/nfts",
+    "nft": "/nfts/{id}"
+  }
+}

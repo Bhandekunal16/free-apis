@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides nine API groups:
+The project currently provides ten API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -13,6 +13,7 @@ The project currently provides nine API groups:
 * **Cat Facts API** — consumes [Cat Facts](https://catfact.ninja/)
 * **Dogs API** — consumes [Dog API](https://dog.ceo/dog-api/)
 * **Jikan API** — consumes [Jikan](https://jikan.moe/)
+* **CoinGecko API** — consumes [CoinGecko](https://www.coingecko.com/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -30,6 +31,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Cat fact retrieval
 * Dog images and breed lookups
 * Anime, manga, character, and people data via Jikan
+* Cryptocurrency prices, markets, and metadata via CoinGecko
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -100,7 +102,8 @@ Example:
   "rickAndMorty": "https://rickandmortyapi.com/api",
   "catFacts": "https://catfact.ninja",
   "dogApi": "https://dog.ceo/api",
-  "jikan": "https://api.jikan.moe/v4"
+  "jikan": "https://api.jikan.moe/v4",
+  "coingecko": "https://api.coingecko.com/api/v3"
 }
 ```
 
@@ -122,7 +125,8 @@ free-apis/
 │   ├── rickAndMorty.json
 │   ├── catFacts.json
 │   ├── dogApi.json
-│   └── jikan.json
+│   ├── jikan.json
+│   └── coingecko.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -133,6 +137,7 @@ free-apis/
 ├── catFacts.js
 ├── dogApi.js
 ├── jikan.js
+├── coingecko.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -486,6 +491,34 @@ GET /jikan?type=animeCharacters&value=1
 ```
 
 The default type is `anime`.
+
+---
+
+## CoinGecko API
+
+The `/coingecko` endpoint consumes cryptocurrency data from CoinGecko.
+
+The `type` parameter selects the CoinGecko operation. Supported operations
+include `ping`, `simplePrice`, `coins`, `coin`, `coinMarkets`, `markets`,
+`trending`, `search`, `global`, `globalDefi`, `categories`, `categoriesList`,
+`exchanges`, `exchange`, `exchangeTickers`, `derivatives`,
+`derivativesExchanges`, `assetPlatforms`, `nfts`, and `nft`.
+
+Use `value` for operations that require a coin, exchange, or NFT ID. Additional
+query parameters such as `ids`, `vs_currencies`, `order`, `per_page`, `page`,
+and `query` are forwarded to CoinGecko.
+
+Examples:
+
+```http
+GET /coingecko
+GET /coingecko?type=simplePrice&ids=bitcoin&vs_currencies=usd
+GET /coingecko?type=coin&value=bitcoin
+GET /coingecko?type=markets&vs_currency=usd&order=market_cap_desc&per_page=10&page=1
+GET /coingecko?type=trending
+```
+
+The default type is `ping`.
 
 ---
 

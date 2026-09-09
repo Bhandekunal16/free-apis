@@ -10,6 +10,7 @@ const RickAndMorty = require("./rickAndMorty");
 const CatFacts = require("./catFacts");
 const DogApi = require("./dogApi");
 const Jikan = require("./jikan");
+const Coingecko = require("./coingecko");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -20,6 +21,7 @@ const rickAndMorty = new RickAndMorty();
 const catFacts = new CatFacts();
 const dogApi = new DogApi();
 const jikan = new Jikan();
+const coingecko = new Coingecko();
 
 const app = express();
 app.use(express.json());
@@ -182,6 +184,18 @@ app.get("/jikan", async (req, res) => {
   const { type = "anime", value, ...query } = req.query;
 
   const data = await jikan.init({
+    type,
+    value,
+    query,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/coingecko", async (req, res) => {
+  const { type = "ping", value, ...query } = req.query;
+
+  const data = await coingecko.init({
     type,
     value,
     query,

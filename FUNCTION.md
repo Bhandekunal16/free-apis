@@ -80,6 +80,14 @@ Express
            │
            ▼
         Jikan API
+
+    /coingecko
+           │
+           ▼
+        CoinGecko
+           │
+           ▼
+        CoinGecko API
 ```
 
 The application follows a simple controller/service architecture.
@@ -799,6 +807,64 @@ The route defaults `type` to `anime`. Operations containing `{id}` require
 `value`; invalid types or missing IDs return `400`. The service uses
 `AbortController` for the configured 15-second timeout and parses JSON, text,
 and binary upstream responses.
+
+---
+
+# CoinGecko Service
+
+File:
+
+```text
+coingecko.js
+```
+
+Class:
+
+```js
+CoinGecko
+```
+
+The CoinGecko service consumes CoinGecko API operations configured in:
+
+```text
+jsons/coingecko.json
+```
+
+Supported operations include price, coin, market, search, global, exchange,
+derivatives, platform, and NFT endpoints.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream endpoint, validates required IDs, appends an optional
+resource value, forwards query parameters, and returns a standardized
+response.
+
+Example:
+
+```js
+await coingecko.init({
+  type: "simplePrice",
+  query: {
+    ids: "bitcoin",
+    vs_currencies: "usd"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /coingecko?type=simplePrice&ids=bitcoin&vs_currencies=usd
+```
+
+The route defaults `type` to `ping`. Operations containing `{id}` require
+`value`; invalid types or missing IDs return `400`. The service uses
+`AbortController` for the configured 15-second timeout and includes the
+configured CoinGecko demo API key when present.
 
 ---
 

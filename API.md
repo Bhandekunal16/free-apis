@@ -674,7 +674,69 @@ The default type is `anime`. Operations containing an ID placeholder require
 
 ---
 
-# 10. Weather API
+# 10. CoinGecko API
+
+The CoinGecko API provides cryptocurrency prices, market data, and metadata.
+
+Configured upstream API:
+
+```text
+https://api.coingecko.com/api/v3
+```
+
+## Get CoinGecko Data
+
+```http
+GET /coingecko
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | CoinGecko operation; defaults to `ping` |
+| `value` | Conditional | Coin, exchange, or NFT ID when required |
+| `ids` | No | Comma-separated coin IDs |
+| `vs_currency` | No | Target fiat or crypto currency |
+| `vs_currencies` | No | Target currencies for simple prices |
+| `order` | No | Market sorting order |
+| `per_page` | No | Results per page |
+| `page` | No | Page number |
+| `query` | No | Search term |
+
+Supported operations include `ping`, `simplePrice`, `coins`, `coin`,
+`coinMarkets`, `markets`, `trending`, `search`, `global`, `globalDefi`,
+`categories`, `categoriesList`, `exchanges`, `exchange`, `exchangeTickers`,
+`derivatives`, `derivativesExchanges`, `assetPlatforms`, `nfts`, and `nft`.
+
+### Examples
+
+```http
+GET /coingecko
+```
+
+```http
+GET /coingecko?type=simplePrice&ids=bitcoin&vs_currencies=usd
+```
+
+```http
+GET /coingecko?type=coin&value=bitcoin
+```
+
+```http
+GET /coingecko?type=markets&vs_currency=usd&order=market_cap_desc&per_page=10&page=1
+```
+
+```http
+GET /coingecko?type=trending
+```
+
+The default type is `ping`. Operations containing an ID placeholder require
+`value`; invalid types or missing required values return `400`.
+
+---
+
+# 11. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -750,7 +812,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 11. HTTP Status Codes
+# 12. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -763,7 +825,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 12. Error Response
+# 13. Error Response
 
 Example:
 
@@ -778,7 +840,7 @@ Example:
 
 ---
 
-# 13. Request Examples
+# 14. Request Examples
 
 ## Fake users
 
@@ -900,9 +962,21 @@ curl "http://localhost:3000/jikan?type=anime&value=1"
 curl "http://localhost:3000/jikan?type=animeCharacters&value=1"
 ```
 
+## CoinGecko price
+
+```bash
+curl "http://localhost:3000/coingecko?type=simplePrice&ids=bitcoin&vs_currencies=usd"
+```
+
+## CoinGecko markets
+
+```bash
+curl "http://localhost:3000/coingecko?type=markets&vs_currency=usd&order=market_cap_desc&per_page=10&page=1"
+```
+
 ---
 
-# 14. Route Summary
+# 15. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -919,6 +993,7 @@ curl "http://localhost:3000/jikan?type=animeCharacters&value=1"
 | `GET`  | `/cat-facts`               | Cat facts lookup         |
 | `GET`  | `/dogs`                    | Dog images and breeds    |
 | `GET`  | `/jikan`                   | Anime and manga lookup  |
+| `GET`  | `/coingecko`               | Cryptocurrency data     |
 
 All currently supported endpoints are read-only.
 
