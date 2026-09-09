@@ -112,6 +112,14 @@ Express
            │
            ▼
         Genderize API
+
+    /nationalize
+           │
+           ▼
+        Nationalize
+           │
+           ▼
+       Nationalize API
 ```
 
 The application follows a simple controller/service architecture.
@@ -1053,6 +1061,63 @@ GET /genderize?type=gender&name=michael&country_id=US
 The route defaults `type` to `gender`. Unsupported types return `400`. The
 service uses `AbortController` for the configured 10-second timeout and parses
 JSON, text, and binary upstream responses.
+
+---
+
+# Nationalize Service
+
+File:
+
+```text
+nationalize.js
+```
+
+Class:
+
+```js
+Nationalize
+```
+
+The Nationalize service consumes the nationality prediction operation
+configured in:
+
+```text
+jsons/nationalize.json
+```
+
+The available operation is `nationality`. It forwards query parameters such as
+`name` and `country_id` to Nationalize.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, forwards query parameters, performs the
+upstream request, and returns a standardized response.
+
+Example:
+
+```js
+await nationalize.init({
+  type: "nationality",
+  query: {
+    name: "michael",
+    country_id: "US"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /nationalize?type=nationality&name=michael&country_id=US
+```
+
+The route defaults `type` to `nationality`. Unsupported types return `400`.
+The service uses `AbortController` for the configured 10-second timeout and
+parses JSON, text, and binary upstream responses.
 
 ---
 

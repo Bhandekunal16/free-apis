@@ -1,0 +1,6 @@
+{
+  "defaultTimeout": 10000,
+  "endpoints": {
+    "nationality": ""
+  }
+}

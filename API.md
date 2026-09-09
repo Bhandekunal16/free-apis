@@ -856,7 +856,49 @@ The default type is `gender`. Invalid operation types return `400`; missing
 
 ---
 
-# 14. Weather API
+# 14. Nationalize API
+
+The Nationalize API predicts the likely nationality of a person from their
+name.
+
+Configured upstream API:
+
+```text
+https://api.nationalize.io
+```
+
+## Predict Nationality
+
+```http
+GET /nationalize
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Response operation; currently `nationality`, defaults to `nationality` |
+| `name` | Yes | Name used for the nationality prediction |
+| `country_id` | No | Two-letter country code used to narrow the prediction |
+
+Additional query parameters are forwarded to Nationalize.
+
+### Examples
+
+```http
+GET /nationalize?name=michael
+```
+
+```http
+GET /nationalize?type=nationality&name=emma&country_id=US
+```
+
+The default type is `nationality`. Invalid operation types return `400`;
+missing `name` may result in an upstream validation error.
+
+---
+
+# 15. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -932,7 +974,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 15. HTTP Status Codes
+# 16. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -945,7 +987,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 16. Error Response
+# 17. Error Response
 
 Example:
 
@@ -960,7 +1002,7 @@ Example:
 
 ---
 
-# 17. Request Examples
+# 18. Request Examples
 
 ## Fake users
 
@@ -1124,9 +1166,21 @@ curl "http://localhost:3000/genderize?name=michael"
 curl "http://localhost:3000/genderize?name=emma&country_id=US"
 ```
 
+## Nationality prediction
+
+```bash
+curl "http://localhost:3000/nationalize?name=michael"
+```
+
+## Nationality prediction by country
+
+```bash
+curl "http://localhost:3000/nationalize?name=emma&country_id=US"
+```
+
 ---
 
-# 18. Route Summary
+# 19. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1147,6 +1201,7 @@ curl "http://localhost:3000/genderize?name=emma&country_id=US"
 | `GET`  | `/ipify`                   | Public IP lookup       |
 | `GET`  | `/agify`                   | Age prediction         |
 | `GET`  | `/genderize`               | Gender prediction      |
+| `GET`  | `/nationalize`              | Nationality prediction |
 
 All currently supported endpoints are read-only.
 

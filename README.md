@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides thirteen API groups:
+The project currently provides fourteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -17,6 +17,7 @@ The project currently provides thirteen API groups:
 * **IPify API** — consumes [IPify](https://www.ipify.org/)
 * **Agify API** — consumes [Agify](https://agify.io/)
 * **Genderize API** — consumes [Genderize](https://genderize.io/)
+* **Nationalize API** — consumes [Nationalize](https://nationalize.io/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -38,6 +39,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Public IP address lookup via IPify
 * Age prediction from names via Agify
 * Gender prediction from names via Genderize
+* Nationality prediction from names via Nationalize
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -112,7 +114,8 @@ Example:
   "coingecko": "https://api.coingecko.com/api/v3",
   "ipify": "https://api.ipify.org",
   "agify": "https://api.agify.io",
-  "genderize": "https://api.genderize.io"
+  "genderize": "https://api.genderize.io",
+  "nationalize": "https://api.nationalize.io"
 }
 ```
 
@@ -138,7 +141,8 @@ free-apis/
 │   ├── coingecko.json
 │   ├── ipify.json
 │   ├── agify.json
-│   └── genderize.json
+│   ├── genderize.json
+│   └── nationalize.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -153,6 +157,7 @@ free-apis/
 ├── ipify.js
 ├── agify.js
 ├── genderize.js
+├── nationalize.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -590,6 +595,24 @@ Examples:
 ```http
 GET /genderize?name=michael
 GET /genderize?type=gender&name=emma&country_id=US
+```
+
+---
+
+## Nationalize API
+
+The `/nationalize` endpoint predicts the likely nationality of a person from
+their name using Nationalize.
+
+The default type is `nationality`. The `name` query parameter is forwarded to
+the upstream API and is required for a useful prediction. An optional
+`country_id` can narrow the result.
+
+Examples:
+
+```http
+GET /nationalize?name=michael
+GET /nationalize?type=nationality&name=emma&country_id=US
 ```
 
 ---
