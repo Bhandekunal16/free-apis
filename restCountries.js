@@ -114,8 +114,6 @@ class RestCountries {
           signal: controller.signal,
         },
       );
-
-      console.log(response, 0);
     } catch (error) {
       if (error.name === "AbortError") {
         return {
