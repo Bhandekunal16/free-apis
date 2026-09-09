@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides eleven API groups:
+The project currently provides twelve API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -15,6 +15,7 @@ The project currently provides eleven API groups:
 * **Jikan API** — consumes [Jikan](https://jikan.moe/)
 * **CoinGecko API** — consumes [CoinGecko](https://www.coingecko.com/)
 * **IPify API** — consumes [IPify](https://www.ipify.org/)
+* **Agify API** — consumes [Agify](https://agify.io/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -34,6 +35,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Anime, manga, character, and people data via Jikan
 * Cryptocurrency prices, markets, and metadata via CoinGecko
 * Public IP address lookup via IPify
+* Age prediction from names via Agify
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -106,7 +108,8 @@ Example:
   "dogApi": "https://dog.ceo/api",
   "jikan": "https://api.jikan.moe/v4",
   "coingecko": "https://api.coingecko.com/api/v3",
-  "ipify": "https://api.ipify.org"
+  "ipify": "https://api.ipify.org",
+  "agify": "https://api.agify.io"
 }
 ```
 
@@ -130,7 +133,8 @@ free-apis/
 │   ├── dogApi.json
 │   ├── jikan.json
 │   ├── coingecko.json
-│   └── ipify.json
+│   ├── ipify.json
+│   └── agify.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -143,6 +147,7 @@ free-apis/
 ├── jikan.js
 ├── coingecko.js
 ├── ipify.js
+├── agify.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -547,6 +552,22 @@ GET /ipify?type=ip
 
 The response may be returned as plain text or JSON depending on the upstream
 content type.
+
+---
+
+## Agify API
+
+The `/agify` endpoint predicts a person's age from their name using Agify.
+
+The default type is `age`. The `name` query parameter is forwarded to the
+upstream API and is required for a useful prediction.
+
+Examples:
+
+```http
+GET /agify?name=michael
+GET /agify?type=age&name=emma&country_id=US
+```
 
 ---
 

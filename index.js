@@ -12,6 +12,7 @@ const DogApi = require("./dogApi");
 const Jikan = require("./jikan");
 const Coingecko = require("./coingecko");
 const Ipify = require("./ipify");
+const Agify = require("./agify");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -24,6 +25,7 @@ const dogApi = new DogApi();
 const jikan = new Jikan();
 const coingecko = new Coingecko();
 const ipify = new Ipify();
+const agify = new Agify();
 
 const app = express();
 app.use(express.json());
@@ -210,6 +212,17 @@ app.get("/ipify", async (req, res) => {
   const { type = "ip", ...query } = req.query;
 
   const data = await ipify.init({
+    type,
+    query,
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/agify", async (req, res) => {
+  const { type = "age", ...query } = req.query;
+
+  const data = await agify.init({
     type,
     query,
   });

@@ -774,7 +774,48 @@ value.
 
 ---
 
-# 12. Weather API
+# 12. Agify API
+
+The Agify API predicts the likely age of a person from their name.
+
+Configured upstream API:
+
+```text
+https://api.agify.io
+```
+
+## Predict Age
+
+```http
+GET /agify
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Response operation; currently `age`, defaults to `age` |
+| `name` | Yes | Name used for the age prediction |
+| `country_id` | No | Two-letter country code used to improve the prediction |
+
+Additional query parameters are forwarded to Agify.
+
+### Examples
+
+```http
+GET /agify?name=michael
+```
+
+```http
+GET /agify?type=age&name=emma&country_id=US
+```
+
+The default type is `age`. Invalid operation types return `400`; missing
+`name` may result in an upstream validation error.
+
+---
+
+# 13. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -850,7 +891,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 13. HTTP Status Codes
+# 14. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -863,7 +904,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 14. Error Response
+# 15. Error Response
 
 Example:
 
@@ -878,7 +919,7 @@ Example:
 
 ---
 
-# 15. Request Examples
+# 16. Request Examples
 
 ## Fake users
 
@@ -1018,9 +1059,21 @@ curl "http://localhost:3000/coingecko?type=markets&vs_currency=usd&order=market_
 curl http://localhost:3000/ipify
 ```
 
+## Age prediction
+
+```bash
+curl "http://localhost:3000/agify?name=michael"
+```
+
+## Age prediction by country
+
+```bash
+curl "http://localhost:3000/agify?name=emma&country_id=US"
+```
+
 ---
 
-# 16. Route Summary
+# 17. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1039,6 +1092,7 @@ curl http://localhost:3000/ipify
 | `GET`  | `/jikan`                   | Anime and manga lookup  |
 | `GET`  | `/coingecko`               | Cryptocurrency data     |
 | `GET`  | `/ipify`                   | Public IP lookup       |
+| `GET`  | `/agify`                   | Age prediction         |
 
 All currently supported endpoints are read-only.
 

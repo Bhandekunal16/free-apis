@@ -96,6 +96,14 @@ Express
             │
             ▼
           IPify API
+
+    /agify
+            │
+            ▼
+           Agify
+            │
+            ▼
+          Agify API
 ```
 
 The application follows a simple controller/service architecture.
@@ -925,6 +933,62 @@ GET /ipify?type=ip
 
 The route defaults `type` to `ip`. Unsupported types return `400`. The service
 uses `AbortController` for the configured 10-second timeout.
+
+---
+
+# Agify Service
+
+File:
+
+```text
+agify.js
+```
+
+Class:
+
+```js
+Agify
+```
+
+The Agify service consumes the age prediction operation configured in:
+
+```text
+jsons/agify.json
+```
+
+The available operation is `age`. It forwards query parameters such as
+`name` and `country_id` to Agify.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, forwards query parameters, performs the
+upstream request, and returns a standardized response.
+
+Example:
+
+```js
+await agify.init({
+  type: "age",
+  query: {
+    name: "michael",
+    country_id: "US"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /agify?type=age&name=michael&country_id=US
+```
+
+The route defaults `type` to `age`. Unsupported types return `400`. The
+service uses `AbortController` for the configured 10-second timeout and parses
+JSON, text, and binary upstream responses.
 
 ---
 
