@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides eight API groups:
+The project currently provides nine API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -12,6 +12,7 @@ The project currently provides eight API groups:
 * **Rick and Morty API** — consumes [Rick and Morty API](https://rickandmortyapi.com/)
 * **Cat Facts API** — consumes [Cat Facts](https://catfact.ninja/)
 * **Dogs API** — consumes [Dog API](https://dog.ceo/dog-api/)
+* **Jikan API** — consumes [Jikan](https://jikan.moe/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -28,6 +29,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Rick and Morty character, location, and episode lookups
 * Cat fact retrieval
 * Dog images and breed lookups
+* Anime, manga, character, and people data via Jikan
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -97,7 +99,8 @@ Example:
   "pokemon": "https://pokeapi.co/api/v2",
   "rickAndMorty": "https://rickandmortyapi.com/api",
   "catFacts": "https://catfact.ninja",
-  "dogApi": "https://dog.ceo/api"
+  "dogApi": "https://dog.ceo/api",
+  "jikan": "https://api.jikan.moe/v4"
 }
 ```
 
@@ -118,7 +121,8 @@ free-apis/
 │   ├── pokemon.json
 │   ├── rickAndMorty.json
 │   ├── catFacts.json
-│   └── dogApi.json
+│   ├── dogApi.json
+│   └── jikan.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -128,6 +132,7 @@ free-apis/
 ├── rickAndMorty.js
 ├── catFacts.js
 ├── dogApi.js
+├── jikan.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -419,6 +424,68 @@ GET /dogs?type=subBreeds&breed=hound
 ```
 
 The default type is `random`.
+
+---
+
+## Jikan API
+
+The `/jikan` endpoint consumes anime and manga data from Jikan.
+
+The `type` parameter selects the Jikan resource or operation. Supported
+types include:
+
+```text
+anime
+manga
+characters
+people
+producers
+magazines
+genres
+themes
+demographics
+animeGenres
+mangaGenres
+animeThemes
+mangaThemes
+animeFull
+animeCharacters
+animeStaff
+animeEpisodes
+animeNews
+animeRecommendations
+animeReviews
+animePictures
+animeVideos
+animeRelations
+animeStreaming
+mangaFull
+mangaCharacters
+mangaNews
+mangaRecommendations
+mangaReviews
+mangaPictures
+characterFull
+characterPictures
+personFull
+personPictures
+```
+
+Use `value` for a specific anime, manga, character, or person ID when the
+selected operation requires one. Additional query parameters are forwarded to
+Jikan, including filters and pagination parameters.
+
+Examples:
+
+```http
+GET /jikan
+GET /jikan?type=anime&value=1
+GET /jikan?type=animeFull&value=1
+GET /jikan?type=anime&limit=10&page=2
+GET /jikan?type=animeCharacters&value=1
+```
+
+The default type is `anime`.
 
 ---
 

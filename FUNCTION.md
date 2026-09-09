@@ -72,6 +72,14 @@ Express
            │
            ▼
          Dog API
+
+    /jikan
+           │
+           ▼
+          Jikan
+           │
+           ▼
+        Jikan API
 ```
 
 The application follows a simple controller/service architecture.
@@ -732,6 +740,64 @@ GET /dogs?type=breedImages&breed=bulldog
 The route defaults `type` to `random`. Operations containing `{breed}` or
 `{subBreed}` require the corresponding query parameter. The service uses
 `AbortController` for the configured 10-second timeout and parses JSON, text,
+and binary upstream responses.
+
+---
+
+# Jikan Service
+
+File:
+
+```text
+jikan.js
+```
+
+Class:
+
+```js
+Jikan
+```
+
+The Jikan service consumes Jikan endpoints configured in:
+
+```text
+jsons/jikan.json
+```
+
+It supports anime, manga, character, people, metadata, and ID-based detail
+operations.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream endpoint, validates required IDs, appends an optional
+resource value, forwards query parameters, and returns a standardized
+response.
+
+Example:
+
+```js
+await jikan.init({
+  type: "animeCharacters",
+  value: 1,
+  query: {
+    page: 1
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /jikan?type=animeCharacters&value=1&page=1
+```
+
+The route defaults `type` to `anime`. Operations containing `{id}` require
+`value`; invalid types or missing IDs return `400`. The service uses
+`AbortController` for the configured 15-second timeout and parses JSON, text,
 and binary upstream responses.
 
 ---

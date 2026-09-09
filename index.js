@@ -8,6 +8,8 @@ const RestCountries = require("./restCountries");
 const Pokemon = require("./pokemon");
 const RickAndMorty = require("./rickAndMorty");
 const CatFacts = require("./catFacts");
+const DogApi = require("./dogApi");
+const Jikan = require("./jikan");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -16,6 +18,8 @@ const openMeteo = new OpenMeteo();
 const pokemon = new Pokemon();
 const rickAndMorty = new RickAndMorty();
 const catFacts = new CatFacts();
+const dogApi = new DogApi();
+const jikan = new Jikan();
 
 const app = express();
 app.use(express.json());
@@ -171,6 +175,18 @@ app.get("/dogs", async (req, res) => {
     subBreed,
     query,
   });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/jikan", async (req, res) => {
+  const { type = "anime", value, ...query } = req.query;
+
+  const data = await jikan.init({
+    type,
+    value,
+    query,
+  });
+
   res.status(data.statusCode ?? 200).json(data);
 });
 

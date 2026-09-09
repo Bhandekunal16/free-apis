@@ -612,7 +612,69 @@ The default operation is `random`. Breed-specific operations require
 
 ---
 
-# 9. Weather API
+# 9. Jikan API
+
+The Jikan API provides access to MyAnimeList data for anime, manga,
+characters, and people.
+
+Configured upstream API:
+
+```text
+https://api.jikan.moe/v4
+```
+
+## Get Jikan Data
+
+```http
+GET /jikan
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Jikan resource or operation; defaults to `anime` |
+| `value` | Conditional | Anime, manga, character, or person ID when required |
+| `limit` | No | Number of list results |
+| `page` | No | Page number for paginated results |
+
+Supported types include `anime`, `manga`, `characters`, `people`, `producers`,
+`magazines`, `genres`, `themes`, `demographics`, `animeGenres`, `mangaGenres`,
+`animeThemes`, `mangaThemes`, `animeFull`, `animeCharacters`, `animeStaff`,
+`animeEpisodes`, `animeNews`, `animeRecommendations`, `animeReviews`,
+`animePictures`, `animeVideos`, `animeRelations`, `animeStreaming`, `mangaFull`,
+`mangaCharacters`, `mangaNews`, `mangaRecommendations`, `mangaReviews`,
+`mangaPictures`, `characterFull`, `characterPictures`, `personFull`, and
+`personPictures`.
+
+### Examples
+
+```http
+GET /jikan
+```
+
+```http
+GET /jikan?type=anime&value=1
+```
+
+```http
+GET /jikan?type=animeFull&value=1
+```
+
+```http
+GET /jikan?type=anime&limit=10&page=2
+```
+
+```http
+GET /jikan?type=animeCharacters&value=1
+```
+
+The default type is `anime`. Operations containing an ID placeholder require
+`value`; invalid types or missing required values return `400`.
+
+---
+
+# 10. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -688,7 +750,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 10. HTTP Status Codes
+# 11. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -701,7 +763,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 11. Error Response
+# 12. Error Response
 
 Example:
 
@@ -716,7 +778,7 @@ Example:
 
 ---
 
-# 12. Request Examples
+# 13. Request Examples
 
 ## Fake users
 
@@ -826,9 +888,21 @@ curl http://localhost:3000/dogs
 curl "http://localhost:3000/dogs?type=breedImages&breed=bulldog"
 ```
 
+## Jikan anime
+
+```bash
+curl "http://localhost:3000/jikan?type=anime&value=1"
+```
+
+## Jikan anime characters
+
+```bash
+curl "http://localhost:3000/jikan?type=animeCharacters&value=1"
+```
+
 ---
 
-# 13. Route Summary
+# 14. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -844,6 +918,7 @@ curl "http://localhost:3000/dogs?type=breedImages&breed=bulldog"
 | `GET`  | `/rick-and-morty`          | Rick and Morty lookup    |
 | `GET`  | `/cat-facts`               | Cat facts lookup         |
 | `GET`  | `/dogs`                    | Dog images and breeds    |
+| `GET`  | `/jikan`                   | Anime and manga lookup  |
 
 All currently supported endpoints are read-only.
 
