@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides ten API groups:
+The project currently provides eleven API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -14,6 +14,7 @@ The project currently provides ten API groups:
 * **Dogs API** — consumes [Dog API](https://dog.ceo/dog-api/)
 * **Jikan API** — consumes [Jikan](https://jikan.moe/)
 * **CoinGecko API** — consumes [CoinGecko](https://www.coingecko.com/)
+* **IPify API** — consumes [IPify](https://www.ipify.org/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -32,6 +33,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Dog images and breed lookups
 * Anime, manga, character, and people data via Jikan
 * Cryptocurrency prices, markets, and metadata via CoinGecko
+* Public IP address lookup via IPify
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -103,7 +105,8 @@ Example:
   "catFacts": "https://catfact.ninja",
   "dogApi": "https://dog.ceo/api",
   "jikan": "https://api.jikan.moe/v4",
-  "coingecko": "https://api.coingecko.com/api/v3"
+  "coingecko": "https://api.coingecko.com/api/v3",
+  "ipify": "https://api.ipify.org"
 }
 ```
 
@@ -126,7 +129,8 @@ free-apis/
 │   ├── catFacts.json
 │   ├── dogApi.json
 │   ├── jikan.json
-│   └── coingecko.json
+│   ├── coingecko.json
+│   └── ipify.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -138,6 +142,7 @@ free-apis/
 ├── dogApi.js
 ├── jikan.js
 ├── coingecko.js
+├── ipify.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -519,6 +524,29 @@ GET /coingecko?type=trending
 ```
 
 The default type is `ping`.
+
+---
+
+## IPify API
+
+The `/ipify` endpoint returns the public IP address of the client making the
+request through IPify.
+
+The default type is `ip`. This service currently supports:
+
+```text
+ip
+```
+
+Examples:
+
+```http
+GET /ipify
+GET /ipify?type=ip
+```
+
+The response may be returned as plain text or JSON depending on the upstream
+content type.
 
 ---
 

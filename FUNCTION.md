@@ -88,6 +88,14 @@ Express
            │
            ▼
         CoinGecko API
+
+    /ipify
+            │
+            ▼
+           Ipify
+            │
+            ▼
+          IPify API
 ```
 
 The application follows a simple controller/service architecture.
@@ -865,6 +873,58 @@ The route defaults `type` to `ping`. Operations containing `{id}` require
 `value`; invalid types or missing IDs return `400`. The service uses
 `AbortController` for the configured 15-second timeout and includes the
 configured CoinGecko demo API key when present.
+
+---
+
+# Ipify Service
+
+File:
+
+```text
+ipify.js
+```
+
+Class:
+
+```js
+Ipify
+```
+
+The Ipify service consumes IPify operations configured in:
+
+```text
+jsons/ipify.json
+```
+
+The available operation is `ip`, which requests the public IP address from
+IPify.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, forwards query parameters, performs the
+upstream request, and returns a standardized response. The response parser
+supports JSON and plain text.
+
+Example:
+
+```js
+await ipify.init({
+  type: "ip"
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /ipify?type=ip
+```
+
+The route defaults `type` to `ip`. Unsupported types return `400`. The service
+uses `AbortController` for the configured 10-second timeout.
 
 ---
 

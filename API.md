@@ -736,7 +736,45 @@ The default type is `ping`. Operations containing an ID placeholder require
 
 ---
 
-# 11. Weather API
+# 11. IPify API
+
+The IPify API returns the public IP address of the requesting client.
+
+Configured upstream API:
+
+```text
+https://api.ipify.org
+```
+
+## Get Public IP
+
+```http
+GET /ipify
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Response operation; currently `ip`, defaults to `ip` |
+
+### Examples
+
+```http
+GET /ipify
+```
+
+```http
+GET /ipify?type=ip
+```
+
+The response is normalized into the standard service envelope. Depending on
+the upstream content type, `data` contains either the IP text or a parsed JSON
+value.
+
+---
+
+# 12. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -812,7 +850,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 12. HTTP Status Codes
+# 13. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -825,7 +863,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 13. Error Response
+# 14. Error Response
 
 Example:
 
@@ -840,7 +878,7 @@ Example:
 
 ---
 
-# 14. Request Examples
+# 15. Request Examples
 
 ## Fake users
 
@@ -974,9 +1012,15 @@ curl "http://localhost:3000/coingecko?type=simplePrice&ids=bitcoin&vs_currencies
 curl "http://localhost:3000/coingecko?type=markets&vs_currency=usd&order=market_cap_desc&per_page=10&page=1"
 ```
 
+## Public IP
+
+```bash
+curl http://localhost:3000/ipify
+```
+
 ---
 
-# 15. Route Summary
+# 16. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -994,6 +1038,7 @@ curl "http://localhost:3000/coingecko?type=markets&vs_currency=usd&order=market_
 | `GET`  | `/dogs`                    | Dog images and breeds    |
 | `GET`  | `/jikan`                   | Anime and manga lookup  |
 | `GET`  | `/coingecko`               | Cryptocurrency data     |
+| `GET`  | `/ipify`                   | Public IP lookup       |
 
 All currently supported endpoints are read-only.
 
