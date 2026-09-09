@@ -3,10 +3,14 @@ const route = require("./jsons/routes.json");
 class RestCountries {
   #baseUrl = route.restcountries;
   #defaultTimeout = 10000;
+  #apiKey;
 
   constructor(config = {}) {
-    this.#baseUrl = config.baseUrl ?? this.#baseUrl;
+    this.#baseUrl = "https://api.restcountries.com";
+
     this.#defaultTimeout = config.timeout ?? this.#defaultTimeout;
+
+    this.#apiKey = "rc_live_f925534e245b412fb67f08f892d732c0";
   }
 
   async init(options = {}) {
@@ -29,19 +33,15 @@ class RestCountries {
       timeout = this.#defaultTimeout,
     } = options;
 
-    // -----------------------------------
-    // Build endpoint
-    // -----------------------------------
-
     const endpoints = {
-      all: "/v3.1/all",
-      name: "/v3.1/name",
-      code: "/v3.1/alpha",
-      currency: "/v3.1/currency",
-      lang: "/v3.1/lang",
-      capital: "/v3.1/capital",
-      region: "/v3.1/region",
-      subregion: "/v3.1/subregion",
+      all: "/countries/v5",
+      name: "/countries/v5/names.common",
+      code: "/countries/v5/codes.alpha_2",
+      currency: "/countries/v5/currencies",
+      lang: "/countries/v5/languages",
+      capital: "/countries/v5/capitals",
+      region: "/countries/v5/region",
+      subregion: "/countries/v5/subregion",
     };
 
     if (!endpoints[type]) {
@@ -55,10 +55,6 @@ class RestCountries {
 
     let url = `${this.#baseUrl}${endpoints[type]}`;
 
-    // -----------------------------------
-    // Path value
-    // -----------------------------------
-
     if (type !== "all") {
       if (!value) {
         return {
@@ -71,15 +67,20 @@ class RestCountries {
       url += `/${encodeURIComponent(value)}`;
     }
 
-    // -----------------------------------
-    // Query parameters
-    // -----------------------------------
-
     const searchParams = new URLSearchParams();
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
         if (value === undefined || value === null) {
+          continue;
+        }
+
+        if (key === "fields") {
+          searchParams.set(
+            "response_fields",
+            Array.isArray(value) ? value.join(",") : String(value),
+          );
+
           continue;
         }
 
@@ -91,16 +92,6 @@ class RestCountries {
       }
     }
 
-    const queryString = searchParams.toString();
-
-    if (queryString) {
-      url += `?${queryString}`;
-    }
-
-    // -----------------------------------
-    // Request timeout
-    // -----------------------------------
-
     const controller = new AbortController();
 
     const timer = setTimeout(() => {
@@ -110,15 +101,21 @@ class RestCountries {
     let response;
 
     try {
-      response = await fetch(url, {
-        method: "GET",
+      response = await fetch(
+        `${url}${searchParams.toString() ? `?${searchParams}` : ""}`,
+        {
+          method: "GET",
 
-        headers: {
-          Accept: "application/json",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.#apiKey}`,
+          },
+
+          signal: controller.signal,
         },
+      );
 
-        signal: controller.signal,
-      });
+      console.log(response, 0);
     } catch (error) {
       if (error.name === "AbortError") {
         return {
@@ -132,7 +129,7 @@ class RestCountries {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Rest Countries API",
+        message: "Failed to connect to REST Countries API",
         error: error.message,
         url,
       };
@@ -140,20 +137,12 @@ class RestCountries {
       clearTimeout(timer);
     }
 
-    // -----------------------------------
-    // Response
-    // -----------------------------------
-
     const contentType =
       response.headers.get("content-type") || "application/octet-stream";
 
     const statusCode = response.status;
 
     const data = await this.#parseResponse(response, contentType);
-
-    // -----------------------------------
-    // Error
-    // -----------------------------------
 
     if (!response.ok) {
       return {
@@ -165,10 +154,6 @@ class RestCountries {
         data,
       };
     }
-
-    // -----------------------------------
-    // Success
-    // -----------------------------------
 
     return {
       success: true,
