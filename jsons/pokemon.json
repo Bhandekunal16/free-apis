@@ -1,0 +1,30 @@
+{
+  "defaultTimeout": 10000,
+  "endpoints": {
+    "pokemon": "/pokemon",
+    "ability": "/ability",
+    "berry": "/berry",
+    "characteristic": "/characteristic",
+    "eggGroup": "/egg-group",
+    "gender": "/gender",
+    "growthRate": "/growth-rate",
+    "item": "/item",
+    "itemAttribute": "/item-attribute",
+    "itemCategory": "/item-category",
+    "itemFlingEffect": "/item-fling-effect",
+    "itemPocket": "/item-pocket",
+    "location": "/location",
+    "locationArea": "/location-area",
+    "machine": "/machine",
+    "move": "/move",
+    "nature": "/nature",
+    "palParkArea": "/pal-park-area",
+    "pokeathlonStat": "/pokeathlon-stat",
+    "pokedex": "/pokedex",
+    "region": "/region",
+    "stat": "/stat",
+    "type": "/type",
+    "version": "/version",
+    "versionGroup": "/version-group"
+  }
+}

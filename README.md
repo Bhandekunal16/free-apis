@@ -2,12 +2,13 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides four API groups:
+The project currently provides five API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
 * **Weather API** — consumes [Open-Meteo](https://open-meteo.com/)
 * **Countries API** — consumes [REST Countries](https://restcountries.com/)
+* **Pokémon API** — consumes [PokéAPI](https://pokeapi.co/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -20,6 +21,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Unified local API endpoints
 * Weather API integration via Open-Meteo
 * Country and region data via REST Countries
+* Pokémon data and resource lookups via PokéAPI
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -102,11 +104,14 @@ free-apis/
 │   ├── fakeData.json
 │   ├── mockData.json
 │   ├── openMeteo.json
-│   └── restCountries.json
+│   ├── restCountries.json
+│   └── pokemon.json
 │
 ├── fakeData.js
 ├── mockData.js
 ├── OpenMeteo.js
+├── restCountries.js
+├── pokemon.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -261,6 +266,55 @@ GET /countries
 GET /countries?type=name&value=india
 GET /countries?type=code&value=IN
 GET /countries?type=region&value=asia&fields=name,capital,flags
+```
+
+---
+
+## Pokémon API
+
+The `/pokemon` endpoint consumes data from PokéAPI.
+
+The `type` parameter selects a PokéAPI resource. Supported resource types
+include:
+
+```text
+pokemon
+ability
+berry
+characteristic
+eggGroup
+gender
+growthRate
+item
+itemAttribute
+itemCategory
+itemFlingEffect
+itemPocket
+location
+locationArea
+machine
+move
+nature
+palParkArea
+pokeathlonStat
+pokedex
+region
+stat
+type
+version
+versionGroup
+```
+
+Use `value` to request a specific resource. `limit` and `offset` are
+forwarded for list requests.
+
+Examples:
+
+```http
+GET /pokemon
+GET /pokemon?type=pokemon&value=charizard
+GET /pokemon?type=move&value=thunderbolt
+GET /pokemon?type=pokemon&limit=20&offset=20
 ```
 
 ---

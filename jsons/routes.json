@@ -2,5 +2,16 @@
   "fakeData": "https://jsonplaceholder.typicode.com",
   "mockData": "https://dummyjson.com",
   "openMeteo": "https://api.open-meteo.com",
-  "restcountries": "https://api.restcountries.com"
+  "restcountries": "https://api.restcountries.com",
+  "pokemon": "https://pokeapi.co/api/v2",
+  "rickAndMorty": "https://rickandmortyapi.com/api",
+  "catFacts": "https://catfact.ninja",
+  "dogApi": "https://dog.ceo/api",
+  "jikan": "https://api.jikan.moe/v4",
+  "coingecko": "https://api.coingecko.com/api/v3",
+  "github": "https://api.github.com",
+  "ipify": "https://api.ipify.org",
+  "agify": "https://api.agify.io",
+  "genderize": "https://api.genderize.io",
+  "nationalize": "https://api.nationalize.io"
 }

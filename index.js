@@ -1,19 +1,21 @@
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 const { host, port } = require("./jsons/app.json");
 const faker = require("./fakeData");
 const mock = require("./mockData");
 const OpenMeteo = require("./OpenMeteo");
 const RestCountries = require("./restCountries");
+const Pokemon = require("./pokemon");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
 const mockData = new mock();
 const openMeteo = new OpenMeteo();
+const pokemon = new Pokemon();
 
 const app = express();
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.get("", (_, res) => {
   res.status(200).send("hello world!");
@@ -111,6 +113,22 @@ app.get("/countries", async (req, res) => {
     value: req.query.value,
     query: {
       fields: req.query.fields,
+    },
+  });
+
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/pokemon", async (req, res) => {
+  const { type, value, limit, offset } = req.query;
+
+  const data = await pokemon.init({
+    type,
+    value,
+
+    query: {
+      limit,
+      offset,
     },
   });
 

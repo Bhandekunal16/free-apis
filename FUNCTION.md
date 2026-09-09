@@ -40,6 +40,14 @@ Express
            │
            ▼
      REST Countries API
+
+    /pokemon
+           │
+           ▼
+         Pokemon
+           │
+           ▼
+         PokéAPI
 ```
 
 The application follows a simple controller/service architecture.
@@ -481,6 +489,61 @@ requires `value`; unsupported types return `400`.
 
 The service uses `AbortController` for the default 10-second timeout and
 parses JSON, text, and binary upstream responses.
+
+---
+
+# Pokemon Service
+
+File:
+
+```text
+pokemon.js
+```
+
+Class:
+
+```js
+Pokemon
+```
+
+The Pokemon service consumes PokéAPI resources configured in:
+
+```text
+jsons/pokemon.json
+```
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream resource URL, validates the requested resource type,
+appends an optional resource value, forwards query parameters, and returns a
+standardized response.
+
+Example:
+
+```js
+await pokemon.init({
+  type: "pokemon",
+  value: "charizard",
+  query: {
+    limit: 20,
+    offset: 20
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /pokemon?type=pokemon&value=charizard&limit=20&offset=20
+```
+
+The default type is `pokemon`. Unsupported types return `400`. The service
+uses `AbortController` for the configured 10-second timeout and parses JSON,
+text, and binary upstream responses.
 
 ---
 

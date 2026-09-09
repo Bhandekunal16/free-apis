@@ -398,7 +398,62 @@ An invalid lookup type or a missing required value returns `400`.
 
 ---
 
-# 5. Weather API
+# 5. Pokémon API
+
+The Pokémon API provides access to PokéAPI resources.
+
+Configured upstream API:
+
+```text
+https://pokeapi.co/api/v2
+```
+
+## Get Pokémon Data
+
+```http
+GET /pokemon
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | PokéAPI resource type; defaults to `pokemon` |
+| `value` | No | Resource name or ID |
+| `limit` | No | Number of list results to return |
+| `offset` | No | Number of list results to skip |
+
+Supported resource types are `pokemon`, `ability`, `berry`, `characteristic`,
+`eggGroup`, `gender`, `growthRate`, `item`, `itemAttribute`, `itemCategory`,
+`itemFlingEffect`, `itemPocket`, `location`, `locationArea`, `machine`, `move`,
+`nature`, `palParkArea`, `pokeathlonStat`, `pokedex`, `region`, `stat`, `type`,
+`version`, and `versionGroup`.
+
+### Examples
+
+```http
+GET /pokemon
+```
+
+```http
+GET /pokemon?type=pokemon&value=charizard
+```
+
+```http
+GET /pokemon?type=move&value=thunderbolt
+```
+
+```http
+GET /pokemon?type=pokemon&limit=20&offset=20
+```
+
+The service returns the upstream response inside a standardized response
+envelope. Invalid resource types return `400`; upstream errors and timeouts
+are propagated as documented below.
+
+---
+
+# 6. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -474,7 +529,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 6. HTTP Status Codes
+# 7. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -487,7 +542,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 7. Error Response
+# 8. Error Response
 
 Example:
 
@@ -502,7 +557,7 @@ Example:
 
 ---
 
-# 8. Request Examples
+# 9. Request Examples
 
 ## Fake users
 
@@ -564,9 +619,21 @@ curl "http://localhost:3000/weather?latitude=52.52&longitude=13.41&current=tempe
 curl "http://localhost:3000/countries?type=name&value=india"
 ```
 
+## Pokémon by name
+
+```bash
+curl "http://localhost:3000/pokemon?type=pokemon&value=charizard"
+```
+
+## Pokémon pagination
+
+```bash
+curl "http://localhost:3000/pokemon?type=pokemon&limit=20&offset=20"
+```
+
 ---
 
-# 9. Route Summary
+# 10. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -578,6 +645,7 @@ curl "http://localhost:3000/countries?type=name&value=india"
 | `GET`  | `/mock/:type/:id`          | Mock API resource        |
 | `GET`  | `/weather`                 | Weather forecast         |
 | `GET`  | `/countries`               | Country lookup           |
+| `GET`  | `/pokemon`                 | Pokémon resource lookup  |
 
 All currently supported endpoints are read-only.
 
