@@ -1,0 +1,14 @@
+{
+  "defaultTimeout": 10000,
+  "key": "rc_live_f925534e245b412fb67f08f892d732c0",
+  "endpoints": {
+    "all": "/countries/v5",
+    "name": "/countries/v5/names.common",
+    "code": "/countries/v5/codes.alpha_2",
+    "currency": "/countries/v5/currencies",
+    "lang": "/countries/v5/languages",
+    "capital": "/countries/v5/capitals",
+    "region": "/countries/v5/region",
+    "subregion": "/countries/v5/subregion"
+  }
+}

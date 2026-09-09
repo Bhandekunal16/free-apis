@@ -1,16 +1,15 @@
 const route = require("./jsons/routes.json");
+const config = require("./jsons/restCountries.json");
 
 class RestCountries {
-  #baseUrl = route.restcountries;
-  #defaultTimeout = 10000;
+  #baseUrl;
   #apiKey;
+  #defaultTimeout;
 
-  constructor(config = {}) {
-    this.#baseUrl = "https://api.restcountries.com";
-
-    this.#defaultTimeout = config.timeout ?? this.#defaultTimeout;
-
-    this.#apiKey = "rc_live_f925534e245b412fb67f08f892d732c0";
+  constructor() {
+    this.#baseUrl = route.restcountries;
+    this.#defaultTimeout = config.defaultTimeout;
+    this.#apiKey = config.key;
   }
 
   async init(options = {}) {
@@ -33,16 +32,7 @@ class RestCountries {
       timeout = this.#defaultTimeout,
     } = options;
 
-    const endpoints = {
-      all: "/countries/v5",
-      name: "/countries/v5/names.common",
-      code: "/countries/v5/codes.alpha_2",
-      currency: "/countries/v5/currencies",
-      lang: "/countries/v5/languages",
-      capital: "/countries/v5/capitals",
-      region: "/countries/v5/region",
-      subregion: "/countries/v5/subregion",
-    };
+    const endpoints = config.endpoints;
 
     if (!endpoints[type]) {
       return {

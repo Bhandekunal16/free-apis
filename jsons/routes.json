@@ -2,5 +2,5 @@
   "fakeData": "https://jsonplaceholder.typicode.com",
   "mockData": "https://dummyjson.com",
   "openMeteo": "https://api.open-meteo.com",
-  "restcountries": "https://restcountries.com"
+  "restcountries": "https://api.restcountries.com"
 }
