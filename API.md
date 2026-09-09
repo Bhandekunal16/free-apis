@@ -453,7 +453,65 @@ are propagated as documented below.
 
 ---
 
-# 6. Weather API
+# 6. Rick and Morty API
+
+The Rick and Morty API provides access to characters, locations, and
+episodes.
+
+Configured upstream API:
+
+```text
+https://rickandmortyapi.com/api
+```
+
+## Get Rick and Morty Data
+
+```http
+GET /rick-and-morty
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `resource` | No | Resource type: `character`, `location`, or `episode`; defaults to `character` |
+| `value` | No | Resource name or ID |
+| `page` | No | Page number for list requests |
+| `name` | No | Character name filter |
+| `status` | No | Character status filter |
+| `species` | No | Character species filter |
+| `gender` | No | Character gender filter |
+| `type` | No | Character type filter |
+| `dimension` | No | Location dimension filter |
+| `episode` | No | Episode code filter |
+
+All query parameters other than `resource` and `value` are forwarded to the
+upstream API.
+
+### Examples
+
+```http
+GET /rick-and-morty
+```
+
+```http
+GET /rick-and-morty?resource=character&value=2
+```
+
+```http
+GET /rick-and-morty?resource=character&name=rick&status=alive
+```
+
+```http
+GET /rick-and-morty?resource=episode&value=1
+```
+
+The default resource is `character`. Invalid resource types return `400`;
+upstream errors and timeouts are propagated as documented below.
+
+---
+
+# 7. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -529,7 +587,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 7. HTTP Status Codes
+# 8. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -542,7 +600,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 8. Error Response
+# 9. Error Response
 
 Example:
 
@@ -557,7 +615,7 @@ Example:
 
 ---
 
-# 9. Request Examples
+# 10. Request Examples
 
 ## Fake users
 
@@ -631,9 +689,21 @@ curl "http://localhost:3000/pokemon?type=pokemon&value=charizard"
 curl "http://localhost:3000/pokemon?type=pokemon&limit=20&offset=20"
 ```
 
+## Rick and Morty character
+
+```bash
+curl "http://localhost:3000/rick-and-morty?resource=character&value=2"
+```
+
+## Rick and Morty character search
+
+```bash
+curl "http://localhost:3000/rick-and-morty?resource=character&name=rick&status=alive"
+```
+
 ---
 
-# 10. Route Summary
+# 11. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -646,6 +716,7 @@ curl "http://localhost:3000/pokemon?type=pokemon&limit=20&offset=20"
 | `GET`  | `/weather`                 | Weather forecast         |
 | `GET`  | `/countries`               | Country lookup           |
 | `GET`  | `/pokemon`                 | Pokémon resource lookup  |
+| `GET`  | `/rick-and-morty`          | Rick and Morty lookup    |
 
 All currently supported endpoints are read-only.
 

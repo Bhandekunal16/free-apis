@@ -2,13 +2,14 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides five API groups:
+The project currently provides six API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
 * **Weather API** — consumes [Open-Meteo](https://open-meteo.com/)
 * **Countries API** — consumes [REST Countries](https://restcountries.com/)
 * **Pokémon API** — consumes [PokéAPI](https://pokeapi.co/)
+* **Rick and Morty API** — consumes [Rick and Morty API](https://rickandmortyapi.com/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -22,6 +23,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Weather API integration via Open-Meteo
 * Country and region data via REST Countries
 * Pokémon data and resource lookups via PokéAPI
+* Rick and Morty character, location, and episode lookups
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -87,7 +89,9 @@ Example:
   "fakeData": "https://jsonplaceholder.typicode.com",
   "mockData": "https://dummyjson.com",
   "openMeteo": "https://api.open-meteo.com",
-  "restcountries": "https://restcountries.com"
+  "restcountries": "https://api.restcountries.com",
+  "pokemon": "https://pokeapi.co/api/v2",
+  "rickAndMorty": "https://rickandmortyapi.com/api"
 }
 ```
 
@@ -105,13 +109,15 @@ free-apis/
 │   ├── mockData.json
 │   ├── openMeteo.json
 │   ├── restCountries.json
-│   └── pokemon.json
+│   ├── pokemon.json
+│   └── rickAndMorty.json
 │
 ├── fakeData.js
 ├── mockData.js
 ├── OpenMeteo.js
 ├── restCountries.js
 ├── pokemon.js
+├── rickAndMorty.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -316,6 +322,35 @@ GET /pokemon?type=pokemon&value=charizard
 GET /pokemon?type=move&value=thunderbolt
 GET /pokemon?type=pokemon&limit=20&offset=20
 ```
+
+---
+
+## Rick and Morty API
+
+The `/rick-and-morty` endpoint consumes data from the Rick and Morty API.
+
+The `resource` parameter selects one of the supported resources:
+
+```text
+character
+location
+episode
+```
+
+Use `value` to request a specific resource. Additional query parameters are
+forwarded to the upstream API, including `page` for pagination and filters
+such as `name`, `status`, `species`, and `gender` for character requests.
+
+Examples:
+
+```http
+GET /rick-and-morty
+GET /rick-and-morty?resource=character&value=2
+GET /rick-and-morty?resource=character&name=rick&status=alive
+GET /rick-and-morty?resource=episode&value=1
+```
+
+The default resource is `character`.
 
 ---
 

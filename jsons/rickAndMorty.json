@@ -1,0 +1,8 @@
+{
+  "defaultTimeout": 10000,
+  "endpoints": {
+    "character": "/character",
+    "location": "/location",
+    "episode": "/episode"
+  }
+}

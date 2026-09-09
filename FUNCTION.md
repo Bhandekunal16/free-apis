@@ -48,6 +48,14 @@ Express
            │
            ▼
          PokéAPI
+
+    /rick-and-morty
+           │
+           ▼
+       RickAndMorty
+           │
+           ▼
+     Rick and Morty API
 ```
 
 The application follows a simple controller/service architecture.
@@ -544,6 +552,63 @@ GET /pokemon?type=pokemon&value=charizard&limit=20&offset=20
 The default type is `pokemon`. Unsupported types return `400`. The service
 uses `AbortController` for the configured 10-second timeout and parses JSON,
 text, and binary upstream responses.
+
+---
+
+# RickAndMorty Service
+
+File:
+
+```text
+rickAndMorty.js
+```
+
+Class:
+
+```js
+RickAndMorty
+```
+
+The RickAndMorty service consumes the Rick and Morty API resources configured
+in:
+
+```text
+jsons/rickAndMorty.json
+```
+
+Supported resource types are `character`, `location`, and `episode`.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream resource URL, appends an optional resource value, forwards
+additional query parameters, and returns a standardized response.
+
+Example:
+
+```js
+await rickAndMorty.init({
+  type: "character",
+  value: 2,
+  query: {
+    name: "rick",
+    status: "alive"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /rick-and-morty?resource=character&value=2&name=rick&status=alive
+```
+
+The route defaults `resource` to `character`. The service uses
+`AbortController` for the configured 10-second timeout and parses JSON, text,
+and binary upstream responses.
 
 ---
 
