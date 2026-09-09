@@ -43,11 +43,15 @@ class RickAndMorty {
 
     let url = `${this.#baseUrl}${endpoints[type]}`;
 
-    if (value !== undefined && value !== null && value !== "") {
-      url += `/${encodeURIComponent(value)}`;
-    }
-
     const searchParams = new URLSearchParams();
+
+    if (value !== undefined && value !== null && value !== "") {
+      if (type === "character") {
+        searchParams.set("name", value);
+      } else {
+        url += `/${encodeURIComponent(value)}`;
+      }
+    }
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {

@@ -6,14 +6,14 @@ const mock = require("./mockData");
 const OpenMeteo = require("./OpenMeteo");
 const RestCountries = require("./restCountries");
 const Pokemon = require("./pokemon");
-const RickAndMorty = require("./rickAndMorty")
+const RickAndMorty = require("./rickAndMorty");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
 const mockData = new mock();
 const openMeteo = new OpenMeteo();
 const pokemon = new Pokemon();
-const rickAndMorty = new RickAndMorty()
+const rickAndMorty = new RickAndMorty();
 
 const app = express();
 app.use(express.json());
@@ -138,15 +138,12 @@ app.get("/pokemon", async (req, res) => {
 });
 
 app.get("/rick-and-morty", async (req, res) => {
-  const {
-    resource = "character",
-    value,
-    ...query
-  } = req.query;
+  const { resource = "character", value, id, ...query } = req.query;
 
   const data = await rickAndMorty.init({
     type: resource,
     value,
+    id,
     query,
   });
 
