@@ -104,6 +104,14 @@ Express
             │
             ▼
           Agify API
+
+    /genderize
+           │
+           ▼
+         Genderize
+           │
+           ▼
+        Genderize API
 ```
 
 The application follows a simple controller/service architecture.
@@ -987,6 +995,62 @@ GET /agify?type=age&name=michael&country_id=US
 ```
 
 The route defaults `type` to `age`. Unsupported types return `400`. The
+service uses `AbortController` for the configured 10-second timeout and parses
+JSON, text, and binary upstream responses.
+
+---
+
+# Genderize Service
+
+File:
+
+```text
+genderize.js
+```
+
+Class:
+
+```js
+Genderize
+```
+
+The Genderize service consumes the gender prediction operation configured in:
+
+```text
+jsons/genderize.json
+```
+
+The available operation is `gender`. It forwards query parameters such as
+`name` and `country_id` to Genderize.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, forwards query parameters, performs the
+upstream request, and returns a standardized response.
+
+Example:
+
+```js
+await genderize.init({
+  type: "gender",
+  query: {
+    name: "michael",
+    country_id: "US"
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /genderize?type=gender&name=michael&country_id=US
+```
+
+The route defaults `type` to `gender`. Unsupported types return `400`. The
 service uses `AbortController` for the configured 10-second timeout and parses
 JSON, text, and binary upstream responses.
 

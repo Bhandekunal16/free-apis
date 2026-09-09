@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides twelve API groups:
+The project currently provides thirteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -16,6 +16,7 @@ The project currently provides twelve API groups:
 * **CoinGecko API** — consumes [CoinGecko](https://www.coingecko.com/)
 * **IPify API** — consumes [IPify](https://www.ipify.org/)
 * **Agify API** — consumes [Agify](https://agify.io/)
+* **Genderize API** — consumes [Genderize](https://genderize.io/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -36,6 +37,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Cryptocurrency prices, markets, and metadata via CoinGecko
 * Public IP address lookup via IPify
 * Age prediction from names via Agify
+* Gender prediction from names via Genderize
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -109,7 +111,8 @@ Example:
   "jikan": "https://api.jikan.moe/v4",
   "coingecko": "https://api.coingecko.com/api/v3",
   "ipify": "https://api.ipify.org",
-  "agify": "https://api.agify.io"
+  "agify": "https://api.agify.io",
+  "genderize": "https://api.genderize.io"
 }
 ```
 
@@ -134,7 +137,8 @@ free-apis/
 │   ├── jikan.json
 │   ├── coingecko.json
 │   ├── ipify.json
-│   └── agify.json
+│   ├── agify.json
+│   └── genderize.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -148,6 +152,7 @@ free-apis/
 ├── coingecko.js
 ├── ipify.js
 ├── agify.js
+├── genderize.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -567,6 +572,24 @@ Examples:
 ```http
 GET /agify?name=michael
 GET /agify?type=age&name=emma&country_id=US
+```
+
+---
+
+## Genderize API
+
+The `/genderize` endpoint predicts the likely gender of a person from their
+name using Genderize.
+
+The default type is `gender`. The `name` query parameter is forwarded to the
+upstream API and is required for a useful prediction. An optional `country_id`
+can improve the result.
+
+Examples:
+
+```http
+GET /genderize?name=michael
+GET /genderize?type=gender&name=emma&country_id=US
 ```
 
 ---

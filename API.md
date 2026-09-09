@@ -815,7 +815,48 @@ The default type is `age`. Invalid operation types return `400`; missing
 
 ---
 
-# 13. Weather API
+# 13. Genderize API
+
+The Genderize API predicts the likely gender of a person from their name.
+
+Configured upstream API:
+
+```text
+https://api.genderize.io
+```
+
+## Predict Gender
+
+```http
+GET /genderize
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Response operation; currently `gender`, defaults to `gender` |
+| `name` | Yes | Name used for the gender prediction |
+| `country_id` | No | Two-letter country code used to improve the prediction |
+
+Additional query parameters are forwarded to Genderize.
+
+### Examples
+
+```http
+GET /genderize?name=michael
+```
+
+```http
+GET /genderize?type=gender&name=emma&country_id=US
+```
+
+The default type is `gender`. Invalid operation types return `400`; missing
+`name` may result in an upstream validation error.
+
+---
+
+# 14. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -891,7 +932,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 14. HTTP Status Codes
+# 15. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -904,7 +945,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 15. Error Response
+# 16. Error Response
 
 Example:
 
@@ -919,7 +960,7 @@ Example:
 
 ---
 
-# 16. Request Examples
+# 17. Request Examples
 
 ## Fake users
 
@@ -1071,9 +1112,21 @@ curl "http://localhost:3000/agify?name=michael"
 curl "http://localhost:3000/agify?name=emma&country_id=US"
 ```
 
+## Gender prediction
+
+```bash
+curl "http://localhost:3000/genderize?name=michael"
+```
+
+## Gender prediction by country
+
+```bash
+curl "http://localhost:3000/genderize?name=emma&country_id=US"
+```
+
 ---
 
-# 17. Route Summary
+# 18. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1093,6 +1146,7 @@ curl "http://localhost:3000/agify?name=emma&country_id=US"
 | `GET`  | `/coingecko`               | Cryptocurrency data     |
 | `GET`  | `/ipify`                   | Public IP lookup       |
 | `GET`  | `/agify`                   | Age prediction         |
+| `GET`  | `/genderize`               | Gender prediction      |
 
 All currently supported endpoints are read-only.
 
