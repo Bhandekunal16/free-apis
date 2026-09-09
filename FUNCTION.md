@@ -64,6 +64,14 @@ Express
            │
            ▼
        Cat Facts API
+
+    /dogs
+           │
+           ▼
+          DogApi
+           │
+           ▼
+         Dog API
 ```
 
 The application follows a simple controller/service architecture.
@@ -671,6 +679,60 @@ GET /cat-facts?type=facts&limit=10
 The route defaults `type` to `fact`. Unsupported types return `400`. The
 service uses `AbortController` for the configured 10-second timeout and parses
 JSON, text, and binary upstream responses.
+
+---
+
+# DogApi Service
+
+File:
+
+```text
+dogApi.js
+```
+
+Class:
+
+```js
+DogApi
+```
+
+The DogApi service consumes Dog API operations configured in:
+
+```text
+jsons/dogApi.json
+```
+
+Supported operation types are `random`, `randomMultiple`, `breedImage`,
+`breedImages`, `breedList`, `subBreeds`, and `breedExists`.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Builds the upstream operation URL, validates required breed parameters,
+forwards query parameters, and returns a standardized response.
+
+Example:
+
+```js
+await dogApi.init({
+  type: "breedImages",
+  breed: "bulldog"
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /dogs?type=breedImages&breed=bulldog
+```
+
+The route defaults `type` to `random`. Operations containing `{breed}` or
+`{subBreed}` require the corresponding query parameter. The service uses
+`AbortController` for the configured 10-second timeout and parses JSON, text,
+and binary upstream responses.
 
 ---
 

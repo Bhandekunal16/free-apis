@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides seven API groups:
+The project currently provides eight API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -11,6 +11,7 @@ The project currently provides seven API groups:
 * **Pokémon API** — consumes [PokéAPI](https://pokeapi.co/)
 * **Rick and Morty API** — consumes [Rick and Morty API](https://rickandmortyapi.com/)
 * **Cat Facts API** — consumes [Cat Facts](https://catfact.ninja/)
+* **Dogs API** — consumes [Dog API](https://dog.ceo/dog-api/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -26,6 +27,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Pokémon data and resource lookups via PokéAPI
 * Rick and Morty character, location, and episode lookups
 * Cat fact retrieval
+* Dog images and breed lookups
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -94,7 +96,8 @@ Example:
   "restcountries": "https://api.restcountries.com",
   "pokemon": "https://pokeapi.co/api/v2",
   "rickAndMorty": "https://rickandmortyapi.com/api",
-  "catFacts": "https://catfact.ninja"
+  "catFacts": "https://catfact.ninja",
+  "dogApi": "https://dog.ceo/api"
 }
 ```
 
@@ -114,7 +117,8 @@ free-apis/
 │   ├── restCountries.json
 │   ├── pokemon.json
 │   ├── rickAndMorty.json
-│   └── catFacts.json
+│   ├── catFacts.json
+│   └── dogApi.json
 │
 ├── fakeData.js
 ├── mockData.js
@@ -123,6 +127,7 @@ free-apis/
 ├── pokemon.js
 ├── rickAndMorty.js
 ├── catFacts.js
+├── dogApi.js
 ├── index.js
 ├── package.json
 ├── README.md
@@ -381,6 +386,39 @@ GET /cat-facts
 GET /cat-facts?type=facts&limit=10
 GET /cat-facts?type=fact&max_length=140
 ```
+
+---
+
+## Dogs API
+
+The `/dogs` endpoint consumes data from the Dog API.
+
+The `type` parameter selects the operation:
+
+```text
+random
+randomMultiple
+breedImage
+breedImages
+breedList
+subBreeds
+breedExists
+```
+
+Use `breed` for breed-specific operations and `subBreed` when required.
+Additional query parameters are forwarded to the upstream API.
+
+Examples:
+
+```http
+GET /dogs
+GET /dogs?type=randomMultiple&limit=5
+GET /dogs?type=breedImage&breed=hound
+GET /dogs?type=breedImages&breed=bulldog
+GET /dogs?type=subBreeds&breed=hound
+```
+
+The default type is `random`.
 
 ---
 

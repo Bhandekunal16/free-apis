@@ -1,0 +1,12 @@
+{
+  "defaultTimeout": 10000,
+  "endpoints": {
+    "random": "/breeds/image/random",
+    "randomMultiple": "/breeds/image/random",
+    "breedImage": "/breed/{breed}/images/random",
+    "breedImages": "/breed/{breed}/images",
+    "breedList": "/breeds/list/all",
+    "subBreeds": "/breed/{breed}/list",
+    "breedExists": "/breed/{breed}/list"
+  }
+}

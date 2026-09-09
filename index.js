@@ -163,6 +163,17 @@ app.get("/cat-facts", async (req, res) => {
   res.status(data.statusCode ?? 200).json(data);
 });
 
+app.get("/dogs", async (req, res) => {
+  const { type = "random", breed, subBreed, ...query } = req.query;
+  const data = await dogApi.init({
+    type,
+    breed,
+    subBreed,
+    query,
+  });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
 app.use((_, res) => {
   res.status(404).send("not found");
 });

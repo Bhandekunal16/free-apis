@@ -557,7 +557,62 @@ upstream errors and timeouts are propagated as documented below.
 
 ---
 
-# 8. Weather API
+# 8. Dogs API
+
+The Dogs API provides dog images and breed information through the Dog API.
+
+Configured upstream API:
+
+```text
+https://dog.ceo/api
+```
+
+## Get Dog Data
+
+```http
+GET /dogs
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `type` | No | Operation type; defaults to `random` |
+| `breed` | Conditional | Breed name for breed-specific operations |
+| `subBreed` | Conditional | Sub-breed name when required |
+| `limit` | No | Number of results for supported list operations |
+
+Supported operation types are `random`, `randomMultiple`, `breedImage`,
+`breedImages`, `breedList`, `subBreeds`, and `breedExists`.
+
+### Examples
+
+```http
+GET /dogs
+```
+
+```http
+GET /dogs?type=randomMultiple&limit=5
+```
+
+```http
+GET /dogs?type=breedImage&breed=hound
+```
+
+```http
+GET /dogs?type=breedImages&breed=bulldog
+```
+
+```http
+GET /dogs?type=subBreeds&breed=hound
+```
+
+The default operation is `random`. Breed-specific operations require
+`breed`; invalid operation types or missing required values return `400`.
+
+---
+
+# 9. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -633,7 +688,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 9. HTTP Status Codes
+# 10. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -646,7 +701,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 10. Error Response
+# 11. Error Response
 
 Example:
 
@@ -661,7 +716,7 @@ Example:
 
 ---
 
-# 11. Request Examples
+# 12. Request Examples
 
 ## Fake users
 
@@ -759,9 +814,21 @@ curl http://localhost:3000/cat-facts
 curl "http://localhost:3000/cat-facts?type=facts&limit=10"
 ```
 
+## Random dog
+
+```bash
+curl http://localhost:3000/dogs
+```
+
+## Dog breed images
+
+```bash
+curl "http://localhost:3000/dogs?type=breedImages&breed=bulldog"
+```
+
 ---
 
-# 12. Route Summary
+# 13. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -776,6 +843,7 @@ curl "http://localhost:3000/cat-facts?type=facts&limit=10"
 | `GET`  | `/pokemon`                 | Pokémon resource lookup  |
 | `GET`  | `/rick-and-morty`          | Rick and Morty lookup    |
 | `GET`  | `/cat-facts`               | Cat facts lookup         |
+| `GET`  | `/dogs`                    | Dog images and breeds    |
 
 All currently supported endpoints are read-only.
 
