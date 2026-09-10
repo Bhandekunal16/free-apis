@@ -1,7 +1,7 @@
 {
   "defaultTimeout": 15000,
   "endpoints": {
-    "books": "/books",
-    "book": "/books/{id}"
+    "books": "/books/",
+    "book": "/books/{id}/"
   }
 }

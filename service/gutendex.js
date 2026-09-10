@@ -43,6 +43,7 @@ class Gutendex {
 
     let endpoint = endpoints[type];
 
+    // Replace {id} placeholder
     if (endpoint.includes("{id}")) {
       if (value === undefined || value === null || value === "") {
         return {
@@ -55,13 +56,11 @@ class Gutendex {
       endpoint = endpoint.replace("{id}", encodeURIComponent(value));
     }
 
-    const url = `${this.#baseUrl}${endpoint}`;
-
     const searchParams = new URLSearchParams();
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
-        if (value === undefined || value === null || value === "") {
+        if (value === undefined || value === null) {
           continue;
         }
 
@@ -73,9 +72,9 @@ class Gutendex {
       }
     }
 
-    const requestUrl = searchParams.toString()
-      ? `${url}?${searchParams.toString()}`
-      : url;
+    const url = `${this.#baseUrl}${endpoint}`;
+
+    const finalUrl = `${url}${searchParams.toString() ? `?${searchParams}` : ""}`;
 
     const controller = new AbortController();
 
@@ -86,14 +85,13 @@ class Gutendex {
     let response;
 
     try {
-      response = await fetch(requestUrl, {
+      response = await fetch(finalUrl, {
         method: "GET",
-
         headers: {
           Accept: "application/json",
-          "User-Agent": "Free-API-Server/1.0",
+        //   "User-Agent": "Free-API-Server/1.0",
         },
-
+        redirect: "follow",
         signal: controller.signal,
       });
     } catch (error) {
@@ -102,7 +100,7 @@ class Gutendex {
           success: false,
           statusCode: 408,
           message: `Request timeout after ${timeout}ms`,
-          url: requestUrl,
+          url: finalUrl,
         };
       }
 
@@ -111,7 +109,7 @@ class Gutendex {
         statusCode: 502,
         message: "Failed to connect to Gutendex API",
         error: error.message,
-        url: requestUrl,
+        url: finalUrl,
       };
     } finally {
       clearTimeout(timer);
@@ -130,7 +128,7 @@ class Gutendex {
         statusCode,
         statusText: response.statusText,
         contentType,
-        url: requestUrl,
+        url: finalUrl,
         data,
       };
     }
@@ -139,7 +137,7 @@ class Gutendex {
       success: true,
       statusCode,
       contentType,
-      url: requestUrl,
+      url: finalUrl,
       data,
     };
   }
