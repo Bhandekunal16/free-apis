@@ -17,7 +17,7 @@ const {
   ipify,
   agify,
   genderize,
-} = require("./depandancyMap");
+} = require("./dependencyMap");
 
 const app = express();
 
