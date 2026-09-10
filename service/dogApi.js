@@ -1,15 +1,13 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/restCountries.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/dogApi.json");
 
-class RestCountries {
+class DogApi {
   #baseUrl;
-  #apiKey;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.restcountries;
+    this.#baseUrl = route.dogApi;
     this.#defaultTimeout = config.defaultTimeout;
-    this.#apiKey = config.key;
   }
 
   async init(options = {}) {
@@ -26,8 +24,9 @@ class RestCountries {
 
   async #apiCall(options) {
     const {
-      type = "all",
-      value,
+      type = "random",
+      breed,
+      subBreed,
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
@@ -43,34 +42,40 @@ class RestCountries {
       };
     }
 
-    let url = `${this.#baseUrl}${endpoints[type]}`;
+    let endpoint = endpoints[type];
 
-    if (type !== "all") {
-      if (!value) {
+    // Validate breed when the endpoint requires it
+    if (endpoint.includes("{breed}")) {
+      if (!breed) {
         return {
           success: false,
           statusCode: 400,
-          message: `value is required for type '${type}'`,
+          message: `breed is required for type '${type}'`,
         };
       }
 
-      url += `/${encodeURIComponent(value)}`;
+      endpoint = endpoint.replace("{breed}", encodeURIComponent(breed));
     }
+
+    if (endpoint.includes("{subBreed}")) {
+      if (!subBreed) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `subBreed is required for type '${type}'`,
+        };
+      }
+
+      endpoint = endpoint.replace("{subBreed}", encodeURIComponent(subBreed));
+    }
+
+    const url = `${this.#baseUrl}${endpoint}`;
 
     const searchParams = new URLSearchParams();
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
-        if (value === undefined || value === null) {
-          continue;
-        }
-
-        if (key === "fields") {
-          searchParams.set(
-            "response_fields",
-            Array.isArray(value) ? value.join(",") : String(value),
-          );
-
+        if (value === undefined || value === null || value === "") {
           continue;
         }
 
@@ -82,6 +87,10 @@ class RestCountries {
       }
     }
 
+    const requestUrl = searchParams.toString()
+      ? `${url}?${searchParams.toString()}`
+      : url;
+
     const controller = new AbortController();
 
     const timer = setTimeout(() => {
@@ -91,35 +100,29 @@ class RestCountries {
     let response;
 
     try {
-      response = await fetch(
-        `${url}${searchParams.toString() ? `?${searchParams}` : ""}`,
-        {
-          method: "GET",
-
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this.#apiKey}`,
-          },
-
-          signal: controller.signal,
+      response = await fetch(requestUrl, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
         },
-      );
+        signal: controller.signal,
+      });
     } catch (error) {
       if (error.name === "AbortError") {
         return {
           success: false,
           statusCode: 408,
           message: `Request timeout after ${timeout}ms`,
-          url,
+          url: requestUrl,
         };
       }
 
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to REST Countries API",
+        message: "Failed to connect to Dog API",
         error: error.message,
-        url,
+        url: requestUrl,
       };
     } finally {
       clearTimeout(timer);
@@ -138,7 +141,7 @@ class RestCountries {
         statusCode,
         statusText: response.statusText,
         contentType,
-        url,
+        url: requestUrl,
         data,
       };
     }
@@ -147,7 +150,7 @@ class RestCountries {
       success: true,
       statusCode,
       contentType,
-      url,
+      url: requestUrl,
       data,
     };
   }
@@ -178,4 +181,4 @@ class RestCountries {
   }
 }
 
-module.exports = RestCountries;
+module.exports = DogApi;

@@ -1,13 +1,15 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/nationalize.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/restCountries.json");
 
-class Nationalize {
+class RestCountries {
   #baseUrl;
+  #apiKey;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.nationalize;
+    this.#baseUrl = route.restcountries;
     this.#defaultTimeout = config.defaultTimeout;
+    this.#apiKey = config.key;
   }
 
   async init(options = {}) {
@@ -24,14 +26,15 @@ class Nationalize {
 
   async #apiCall(options) {
     const {
-      type = "nationality",
+      type = "all",
+      value,
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
+    if (!endpoints[type]) {
       return {
         success: false,
         statusCode: 400,
@@ -40,13 +43,34 @@ class Nationalize {
       };
     }
 
-    const url = `${this.#baseUrl}${endpoints[type]}`;
+    let url = `${this.#baseUrl}${endpoints[type]}`;
+
+    if (type !== "all") {
+      if (!value) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `value is required for type '${type}'`,
+        };
+      }
+
+      url += `/${encodeURIComponent(value)}`;
+    }
 
     const searchParams = new URLSearchParams();
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
-        if (value === undefined || value === null || value === "") {
+        if (value === undefined || value === null) {
+          continue;
+        }
+
+        if (key === "fields") {
+          searchParams.set(
+            "response_fields",
+            Array.isArray(value) ? value.join(",") : String(value),
+          );
+
           continue;
         }
 
@@ -58,10 +82,6 @@ class Nationalize {
       }
     }
 
-    const requestUrl = searchParams.toString()
-      ? `${url}?${searchParams.toString()}`
-      : url;
-
     const controller = new AbortController();
 
     const timer = setTimeout(() => {
@@ -71,31 +91,35 @@ class Nationalize {
     let response;
 
     try {
-      response = await fetch(requestUrl, {
-        method: "GET",
+      response = await fetch(
+        `${url}${searchParams.toString() ? `?${searchParams}` : ""}`,
+        {
+          method: "GET",
 
-        headers: {
-          Accept: "application/json",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.#apiKey}`,
+          },
+
+          signal: controller.signal,
         },
-
-        signal: controller.signal,
-      });
+      );
     } catch (error) {
       if (error.name === "AbortError") {
         return {
           success: false,
           statusCode: 408,
           message: `Request timeout after ${timeout}ms`,
-          url: requestUrl,
+          url,
         };
       }
 
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Nationalize API",
+        message: "Failed to connect to REST Countries API",
         error: error.message,
-        url: requestUrl,
+        url,
       };
     } finally {
       clearTimeout(timer);
@@ -114,7 +138,7 @@ class Nationalize {
         statusCode,
         statusText: response.statusText,
         contentType,
-        url: requestUrl,
+        url,
         data,
       };
     }
@@ -123,7 +147,7 @@ class Nationalize {
       success: true,
       statusCode,
       contentType,
-      url: requestUrl,
+      url,
       data,
     };
   }
@@ -154,4 +178,4 @@ class Nationalize {
   }
 }
 
-module.exports = Nationalize;
+module.exports = RestCountries;

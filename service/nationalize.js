@@ -1,12 +1,12 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/dogApi.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/nationalize.json");
 
-class DogApi {
+class Nationalize {
   #baseUrl;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.dogApi;
+    this.#baseUrl = route.nationalize;
     this.#defaultTimeout = config.defaultTimeout;
   }
 
@@ -24,16 +24,14 @@ class DogApi {
 
   async #apiCall(options) {
     const {
-      type = "random",
-      breed,
-      subBreed,
+      type = "nationality",
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!endpoints[type]) {
+    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
       return {
         success: false,
         statusCode: 400,
@@ -42,34 +40,7 @@ class DogApi {
       };
     }
 
-    let endpoint = endpoints[type];
-
-    // Validate breed when the endpoint requires it
-    if (endpoint.includes("{breed}")) {
-      if (!breed) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `breed is required for type '${type}'`,
-        };
-      }
-
-      endpoint = endpoint.replace("{breed}", encodeURIComponent(breed));
-    }
-
-    if (endpoint.includes("{subBreed}")) {
-      if (!subBreed) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `subBreed is required for type '${type}'`,
-        };
-      }
-
-      endpoint = endpoint.replace("{subBreed}", encodeURIComponent(subBreed));
-    }
-
-    const url = `${this.#baseUrl}${endpoint}`;
+    const url = `${this.#baseUrl}${endpoints[type]}`;
 
     const searchParams = new URLSearchParams();
 
@@ -102,9 +73,11 @@ class DogApi {
     try {
       response = await fetch(requestUrl, {
         method: "GET",
+
         headers: {
           Accept: "application/json",
         },
+
         signal: controller.signal,
       });
     } catch (error) {
@@ -120,7 +93,7 @@ class DogApi {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Dog API",
+        message: "Failed to connect to Nationalize API",
         error: error.message,
         url: requestUrl,
       };
@@ -181,4 +154,4 @@ class DogApi {
   }
 }
 
-module.exports = DogApi;
+module.exports = Nationalize;

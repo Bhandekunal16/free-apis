@@ -1,5 +1,5 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/coingecko.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/coingecko.json");
 
 class CoinGecko {
   #baseUrl;

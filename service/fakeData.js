@@ -1,5 +1,5 @@
-const config = require("./jsons/fakeData.json");
-const routes = require("./jsons/routes.json");
+const config = require("../jsons/fakeData.json");
+const routes = require("../jsons/routes.json");
 
 class FakeData {
   #resources = new Set(config.resources ?? []);

@@ -1,15 +1,13 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/github.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/agify.json");
 
-class GitHub {
+class Agify {
   #baseUrl;
-  #apiKey;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.github;
+    this.#baseUrl = route.agify;
     this.#defaultTimeout = config.defaultTimeout;
-    this.#apiKey = process.env.GITHUB_TOKEN || config.key || "";
   }
 
   async init(options = {}) {
@@ -26,11 +24,7 @@ class GitHub {
 
   async #apiCall(options) {
     const {
-      type = "users",
-      value,
-      owner,
-      repo,
-      username,
+      type = "age",
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
@@ -46,56 +40,7 @@ class GitHub {
       };
     }
 
-    let endpoint = endpoints[type];
-
-    // Replace username
-    if (endpoint.includes("{username}")) {
-      if (!username && !value) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `username is required for type '${type}'`,
-        };
-      }
-
-      endpoint = endpoint.replace(
-        "{username}",
-        encodeURIComponent(username || value),
-      );
-    }
-
-    // Replace owner
-    if (endpoint.includes("{owner}")) {
-      if (!owner) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `owner is required for type '${type}'`,
-        };
-      }
-
-      endpoint = endpoint.replace("{owner}", encodeURIComponent(owner));
-    }
-
-    // Replace repo
-    if (endpoint.includes("{repo}")) {
-      if (!repo) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `repo is required for type '${type}'`,
-        };
-      }
-
-      endpoint = endpoint.replace("{repo}", encodeURIComponent(repo));
-    }
-
-    // Resource with simple ID/value
-    if (endpoint.includes("{id}") && value !== undefined && value !== null) {
-      endpoint = endpoint.replace("{id}", encodeURIComponent(value));
-    }
-
-    const url = `${this.#baseUrl}${endpoint}`;
+    const url = `${this.#baseUrl}${endpoints[type]}`;
 
     const searchParams = new URLSearchParams();
 
@@ -117,16 +62,6 @@ class GitHub {
       ? `${url}?${searchParams.toString()}`
       : url;
 
-    const headers = {
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "Free-API-Server",
-    };
-
-    if (this.#apiKey) {
-      headers.Authorization = `Bearer ${this.#apiKey}`;
-    }
-
     const controller = new AbortController();
 
     const timer = setTimeout(() => {
@@ -138,7 +73,11 @@ class GitHub {
     try {
       response = await fetch(requestUrl, {
         method: "GET",
-        headers,
+
+        headers: {
+          Accept: "application/json",
+        },
+
         signal: controller.signal,
       });
     } catch (error) {
@@ -154,7 +93,7 @@ class GitHub {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to GitHub API",
+        message: "Failed to connect to Agify API",
         error: error.message,
         url: requestUrl,
       };
@@ -215,4 +154,4 @@ class GitHub {
   }
 }
 
-module.exports = GitHub;
+module.exports = Agify;

@@ -1,12 +1,12 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/genderize.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/jikan.json");
 
-class Genderize {
+class Jikan {
   #baseUrl;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.genderize;
+    this.#baseUrl = route.jikan;
     this.#defaultTimeout = config.defaultTimeout;
   }
 
@@ -24,14 +24,15 @@ class Genderize {
 
   async #apiCall(options) {
     const {
-      type = "gender",
+      type = "anime",
+      value,
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
+    if (!endpoints[type]) {
       return {
         success: false,
         statusCode: 400,
@@ -40,7 +41,29 @@ class Genderize {
       };
     }
 
-    const url = `${this.#baseUrl}${endpoints[type]}`;
+    let endpoint = endpoints[type];
+
+    // Replace {id} when required
+    if (endpoint.includes("{id}")) {
+      if (value === undefined || value === null || value === "") {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `value is required for type '${type}'`,
+        };
+      }
+
+      endpoint = endpoint.replace("{id}", encodeURIComponent(value));
+    } else if (value !== undefined && value !== null && value !== "") {
+      // For normal resources:
+      // /anime/1
+      // /manga/1
+      // /characters/1
+      // /people/1
+      endpoint += `/${encodeURIComponent(value)}`;
+    }
+
+    const url = `${this.#baseUrl}${endpoint}`;
 
     const searchParams = new URLSearchParams();
 
@@ -93,7 +116,7 @@ class Genderize {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Genderize API",
+        message: "Failed to connect to Jikan API",
         error: error.message,
         url: requestUrl,
       };
@@ -116,6 +139,7 @@ class Genderize {
         contentType,
         url: requestUrl,
         data,
+        upstream: "Jikan",
       };
     }
 
@@ -154,4 +178,4 @@ class Genderize {
   }
 }
 
-module.exports = Genderize;
+module.exports = Jikan;

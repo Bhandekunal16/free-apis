@@ -1,5 +1,5 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/pokemon.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/pokemon.json");
 
 class Pokemon {
   #baseUrl;

@@ -1,5 +1,5 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/openMeteo.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/openMeteo.json");
 
 class OpenMeteo {
   #baseUrl = route.openMeteo;

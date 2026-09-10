@@ -1,14 +1,13 @@
-class MockData {
-  #api = require("./jsons/routes.json");
-  #config = require("./jsons/mockData.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/rickAndMorty.json");
 
-  #params;
-  #filters;
-  #defaultTimeout = 10000;
+class RickAndMorty {
+  #baseUrl;
+  #defaultTimeout;
 
   constructor() {
-    this.#params = this.#config.params ?? [];
-    this.#filters = this.#config.filters ?? [];
+    this.#baseUrl = route.rickAndMorty;
+    this.#defaultTimeout = config.defaultTimeout;
   }
 
   async init(options = {}) {
@@ -25,63 +24,40 @@ class MockData {
 
   async #apiCall(options) {
     const {
-      type,
-      id,
-      subtype,
-      paramKey,
-      paramValue,
+      type = "character",
+      value,
       query = {},
-      page,
-      limit,
-      skip,
-      sortBy,
-      order,
       timeout = this.#defaultTimeout,
     } = options;
 
-    if (!type) {
-      return {
-        success: false,
-        statusCode: 400,
-        message: "type is required",
-      };
-    }
+    const endpoints = config.endpoints;
 
-    if (!this.#params.includes(type)) {
+    if (!endpoints[type]) {
       return {
         success: false,
         statusCode: 400,
         message: `Invalid type '${type}'`,
+        availableTypes: Object.keys(endpoints),
       };
     }
 
-    const baseUrl = this.#api.mockData;
-
-    let url = `${baseUrl}/${encodeURIComponent(type)}`;
-
-    if (id !== undefined && id !== null) {
-      url += `/${encodeURIComponent(id)}`;
-    } else if (subtype) {
-      url += `/${encodeURIComponent(subtype)}`;
-    }
+    let url = `${this.#baseUrl}${endpoints[type]}`;
 
     const searchParams = new URLSearchParams();
 
-    if (paramKey && paramValue !== undefined) {
-      if (!this.#filters.includes(paramKey)) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `Invalid filter '${paramKey}'`,
-        };
+    if (value !== undefined && value !== null && value !== "") {
+      if (type === "character") {
+        searchParams.set("name", value);
+      } else {
+        url += `/${encodeURIComponent(value)}`;
       }
-
-      searchParams.set(paramKey, paramValue);
     }
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
-        if (value === undefined || value === null) continue;
+        if (value === undefined || value === null || value === "") {
+          continue;
+        }
 
         if (Array.isArray(value)) {
           searchParams.set(key, value.join(","));
@@ -91,32 +67,9 @@ class MockData {
       }
     }
 
-    if (page !== undefined) {
-      searchParams.set("page", page);
-    }
-
-    if (limit !== undefined) {
-      searchParams.set("limit", limit);
-    }
-
-    if (skip !== undefined) {
-      searchParams.set("skip", skip);
-    }
-
-    // Sorting
-    if (sortBy) {
-      searchParams.set("sortBy", sortBy);
-    }
-
-    if (order) {
-      searchParams.set("order", order);
-    }
-
-    const queryString = searchParams.toString();
-
-    if (queryString) {
-      url += `?${queryString}`;
-    }
+    const requestUrl = searchParams.toString()
+      ? `${url}?${searchParams.toString()}`
+      : url;
 
     const controller = new AbortController();
 
@@ -127,10 +80,10 @@ class MockData {
     let response;
 
     try {
-      response = await fetch(url, {
+      response = await fetch(requestUrl, {
         method: "GET",
         headers: {
-          Accept: "*/*",
+          Accept: "application/json",
         },
         signal: controller.signal,
       });
@@ -140,16 +93,16 @@ class MockData {
           success: false,
           statusCode: 408,
           message: `Request timeout after ${timeout}ms`,
-          url,
+          url: requestUrl,
         };
       }
 
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to API",
+        message: "Failed to connect to Rick and Morty API",
         error: error.message,
-        url,
+        url: requestUrl,
       };
     } finally {
       clearTimeout(timer);
@@ -160,30 +113,29 @@ class MockData {
 
     const statusCode = response.status;
 
+    const data = await this.#parseResponse(response, contentType);
+
     if (!response.ok) {
       return {
         success: false,
         statusCode,
         statusText: response.statusText,
         contentType,
-        url,
-        data: await this.#parseResponse(response, contentType),
+        url: requestUrl,
+        data,
       };
     }
-
-    const data = await this.#parseResponse(response, contentType);
 
     return {
       success: true,
       statusCode,
       contentType,
-      url,
+      url: requestUrl,
       data,
     };
   }
 
   async #parseResponse(response, contentType) {
-    // JSON
     if (
       contentType.includes("application/json") ||
       contentType.includes("+json")
@@ -209,4 +161,4 @@ class MockData {
   }
 }
 
-module.exports = MockData;
+module.exports = RickAndMorty;

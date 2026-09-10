@@ -1,12 +1,12 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/agify.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/catFacts.json");
 
-class Agify {
+class CatFacts {
   #baseUrl;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.agify;
+    this.#baseUrl = route.catFacts;
     this.#defaultTimeout = config.defaultTimeout;
   }
 
@@ -24,14 +24,14 @@ class Agify {
 
   async #apiCall(options) {
     const {
-      type = "age",
+      type = "fact",
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
+    if (!endpoints[type]) {
       return {
         success: false,
         statusCode: 400,
@@ -93,7 +93,7 @@ class Agify {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Agify API",
+        message: "Failed to connect to Cat Facts API",
         error: error.message,
         url: requestUrl,
       };
@@ -154,4 +154,4 @@ class Agify {
   }
 }
 
-module.exports = Agify;
+module.exports = CatFacts;

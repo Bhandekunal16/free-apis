@@ -1,5 +1,5 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/ipify.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/ipify.json");
 
 class Ipify {
   #baseUrl;

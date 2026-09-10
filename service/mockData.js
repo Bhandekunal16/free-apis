@@ -1,13 +1,14 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/jikan.json");
+class MockData {
+  #api = require("../jsons/routes.json");
+  #config = require("../jsons/mockData.json");
 
-class Jikan {
-  #baseUrl;
-  #defaultTimeout;
+  #params;
+  #filters;
+  #defaultTimeout = 10000;
 
   constructor() {
-    this.#baseUrl = route.jikan;
-    this.#defaultTimeout = config.defaultTimeout;
+    this.#params = this.#config.params ?? [];
+    this.#filters = this.#config.filters ?? [];
   }
 
   async init(options = {}) {
@@ -24,54 +25,63 @@ class Jikan {
 
   async #apiCall(options) {
     const {
-      type = "anime",
-      value,
+      type,
+      id,
+      subtype,
+      paramKey,
+      paramValue,
       query = {},
+      page,
+      limit,
+      skip,
+      sortBy,
+      order,
       timeout = this.#defaultTimeout,
     } = options;
 
-    const endpoints = config.endpoints;
+    if (!type) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: "type is required",
+      };
+    }
 
-    if (!endpoints[type]) {
+    if (!this.#params.includes(type)) {
       return {
         success: false,
         statusCode: 400,
         message: `Invalid type '${type}'`,
-        availableTypes: Object.keys(endpoints),
       };
     }
 
-    let endpoint = endpoints[type];
+    const baseUrl = this.#api.mockData;
 
-    // Replace {id} when required
-    if (endpoint.includes("{id}")) {
-      if (value === undefined || value === null || value === "") {
-        return {
-          success: false,
-          statusCode: 400,
-          message: `value is required for type '${type}'`,
-        };
-      }
+    let url = `${baseUrl}/${encodeURIComponent(type)}`;
 
-      endpoint = endpoint.replace("{id}", encodeURIComponent(value));
-    } else if (value !== undefined && value !== null && value !== "") {
-      // For normal resources:
-      // /anime/1
-      // /manga/1
-      // /characters/1
-      // /people/1
-      endpoint += `/${encodeURIComponent(value)}`;
+    if (id !== undefined && id !== null) {
+      url += `/${encodeURIComponent(id)}`;
+    } else if (subtype) {
+      url += `/${encodeURIComponent(subtype)}`;
     }
-
-    const url = `${this.#baseUrl}${endpoint}`;
 
     const searchParams = new URLSearchParams();
 
+    if (paramKey && paramValue !== undefined) {
+      if (!this.#filters.includes(paramKey)) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `Invalid filter '${paramKey}'`,
+        };
+      }
+
+      searchParams.set(paramKey, paramValue);
+    }
+
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
-        if (value === undefined || value === null || value === "") {
-          continue;
-        }
+        if (value === undefined || value === null) continue;
 
         if (Array.isArray(value)) {
           searchParams.set(key, value.join(","));
@@ -81,9 +91,32 @@ class Jikan {
       }
     }
 
-    const requestUrl = searchParams.toString()
-      ? `${url}?${searchParams.toString()}`
-      : url;
+    if (page !== undefined) {
+      searchParams.set("page", page);
+    }
+
+    if (limit !== undefined) {
+      searchParams.set("limit", limit);
+    }
+
+    if (skip !== undefined) {
+      searchParams.set("skip", skip);
+    }
+
+    // Sorting
+    if (sortBy) {
+      searchParams.set("sortBy", sortBy);
+    }
+
+    if (order) {
+      searchParams.set("order", order);
+    }
+
+    const queryString = searchParams.toString();
+
+    if (queryString) {
+      url += `?${queryString}`;
+    }
 
     const controller = new AbortController();
 
@@ -94,13 +127,11 @@ class Jikan {
     let response;
 
     try {
-      response = await fetch(requestUrl, {
+      response = await fetch(url, {
         method: "GET",
-
         headers: {
-          Accept: "application/json",
+          Accept: "*/*",
         },
-
         signal: controller.signal,
       });
     } catch (error) {
@@ -109,16 +140,16 @@ class Jikan {
           success: false,
           statusCode: 408,
           message: `Request timeout after ${timeout}ms`,
-          url: requestUrl,
+          url,
         };
       }
 
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Jikan API",
+        message: "Failed to connect to API",
         error: error.message,
-        url: requestUrl,
+        url,
       };
     } finally {
       clearTimeout(timer);
@@ -129,30 +160,30 @@ class Jikan {
 
     const statusCode = response.status;
 
-    const data = await this.#parseResponse(response, contentType);
-
     if (!response.ok) {
       return {
         success: false,
         statusCode,
         statusText: response.statusText,
         contentType,
-        url: requestUrl,
-        data,
-        upstream: "Jikan",
+        url,
+        data: await this.#parseResponse(response, contentType),
       };
     }
+
+    const data = await this.#parseResponse(response, contentType);
 
     return {
       success: true,
       statusCode,
       contentType,
-      url: requestUrl,
+      url,
       data,
     };
   }
 
   async #parseResponse(response, contentType) {
+    // JSON
     if (
       contentType.includes("application/json") ||
       contentType.includes("+json")
@@ -178,4 +209,4 @@ class Jikan {
   }
 }
 
-module.exports = Jikan;
+module.exports = MockData;

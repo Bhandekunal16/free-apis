@@ -1,13 +1,15 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/rickAndMorty.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/github.json");
 
-class RickAndMorty {
+class GitHub {
   #baseUrl;
+  #apiKey;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.rickAndMorty;
+    this.#baseUrl = route.github;
     this.#defaultTimeout = config.defaultTimeout;
+    this.#apiKey = process.env.GITHUB_TOKEN || config.key || "";
   }
 
   async init(options = {}) {
@@ -24,15 +26,18 @@ class RickAndMorty {
 
   async #apiCall(options) {
     const {
-      type = "character",
+      type = "users",
       value,
+      owner,
+      repo,
+      username,
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!endpoints[type]) {
+    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
       return {
         success: false,
         statusCode: 400,
@@ -41,17 +46,58 @@ class RickAndMorty {
       };
     }
 
-    let url = `${this.#baseUrl}${endpoints[type]}`;
+    let endpoint = endpoints[type];
+
+    // Replace username
+    if (endpoint.includes("{username}")) {
+      if (!username && !value) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `username is required for type '${type}'`,
+        };
+      }
+
+      endpoint = endpoint.replace(
+        "{username}",
+        encodeURIComponent(username || value),
+      );
+    }
+
+    // Replace owner
+    if (endpoint.includes("{owner}")) {
+      if (!owner) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `owner is required for type '${type}'`,
+        };
+      }
+
+      endpoint = endpoint.replace("{owner}", encodeURIComponent(owner));
+    }
+
+    // Replace repo
+    if (endpoint.includes("{repo}")) {
+      if (!repo) {
+        return {
+          success: false,
+          statusCode: 400,
+          message: `repo is required for type '${type}'`,
+        };
+      }
+
+      endpoint = endpoint.replace("{repo}", encodeURIComponent(repo));
+    }
+
+    // Resource with simple ID/value
+    if (endpoint.includes("{id}") && value !== undefined && value !== null) {
+      endpoint = endpoint.replace("{id}", encodeURIComponent(value));
+    }
+
+    const url = `${this.#baseUrl}${endpoint}`;
 
     const searchParams = new URLSearchParams();
-
-    if (value !== undefined && value !== null && value !== "") {
-      if (type === "character") {
-        searchParams.set("name", value);
-      } else {
-        url += `/${encodeURIComponent(value)}`;
-      }
-    }
 
     if (query && typeof query === "object") {
       for (const [key, value] of Object.entries(query)) {
@@ -71,6 +117,16 @@ class RickAndMorty {
       ? `${url}?${searchParams.toString()}`
       : url;
 
+    const headers = {
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "User-Agent": "Free-API-Server",
+    };
+
+    if (this.#apiKey) {
+      headers.Authorization = `Bearer ${this.#apiKey}`;
+    }
+
     const controller = new AbortController();
 
     const timer = setTimeout(() => {
@@ -82,9 +138,7 @@ class RickAndMorty {
     try {
       response = await fetch(requestUrl, {
         method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
+        headers,
         signal: controller.signal,
       });
     } catch (error) {
@@ -100,7 +154,7 @@ class RickAndMorty {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Rick and Morty API",
+        message: "Failed to connect to GitHub API",
         error: error.message,
         url: requestUrl,
       };
@@ -161,4 +215,4 @@ class RickAndMorty {
   }
 }
 
-module.exports = RickAndMorty;
+module.exports = GitHub;

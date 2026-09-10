@@ -1,12 +1,12 @@
-const route = require("./jsons/routes.json");
-const config = require("./jsons/catFacts.json");
+const route = require("../jsons/routes.json");
+const config = require("../jsons/genderize.json");
 
-class CatFacts {
+class Genderize {
   #baseUrl;
   #defaultTimeout;
 
   constructor() {
-    this.#baseUrl = route.catFacts;
+    this.#baseUrl = route.genderize;
     this.#defaultTimeout = config.defaultTimeout;
   }
 
@@ -24,14 +24,14 @@ class CatFacts {
 
   async #apiCall(options) {
     const {
-      type = "fact",
+      type = "gender",
       query = {},
       timeout = this.#defaultTimeout,
     } = options;
 
     const endpoints = config.endpoints;
 
-    if (!endpoints[type]) {
+    if (!Object.prototype.hasOwnProperty.call(endpoints, type)) {
       return {
         success: false,
         statusCode: 400,
@@ -93,7 +93,7 @@ class CatFacts {
       return {
         success: false,
         statusCode: 502,
-        message: "Failed to connect to Cat Facts API",
+        message: "Failed to connect to Genderize API",
         error: error.message,
         url: requestUrl,
       };
@@ -154,4 +154,4 @@ class CatFacts {
   }
 }
 
-module.exports = CatFacts;
+module.exports = Genderize;
