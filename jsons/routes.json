@@ -13,5 +13,6 @@
   "ipify": "https://api.ipify.org",
   "agify": "https://api.agify.io",
   "genderize": "https://api.genderize.io",
-  "nationalize": "https://api.nationalize.io"
+  "nationalize": "https://api.nationalize.io",
+  "openLibrary": "https://openlibrary.org"
 }

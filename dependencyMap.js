@@ -16,6 +16,7 @@ const Agify = require("./service/agify");
 const Genderize = require("./service/genderize");
 const Nationalize = require("./service/nationalize");
 const Github = require("./service/github");
+const OpenLibrary = require("./service/openLibrary");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -32,6 +33,7 @@ const agify = new Agify();
 const genderize = new Genderize();
 const nationalize = new Nationalize();
 const github = new Github();
+const openLibrary = new OpenLibrary();
 
 module.exports = {
   github,
@@ -49,4 +51,5 @@ module.exports = {
   ipify,
   agify,
   genderize,
+  openLibrary,
 };

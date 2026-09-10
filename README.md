@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides fifteen API groups:
+The project currently provides sixteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -19,6 +19,7 @@ The project currently provides fifteen API groups:
 * **Genderize API** — consumes [Genderize](https://genderize.io/)
 * **Nationalize API** — consumes [Nationalize](https://nationalize.io/)
 * **GitHub API** — consumes [GitHub REST API](https://docs.github.com/en/rest)
+* **Open Library API** — consumes [Open Library](https://openlibrary.org/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -42,6 +43,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Gender prediction from names via Genderize
 * Nationality prediction from names via Nationalize
 * GitHub users, repositories, searches, and repository metadata
+* Book, author, edition, subject, and ISBN metadata via Open Library
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -118,7 +120,8 @@ Example:
   "agify": "https://api.agify.io",
   "genderize": "https://api.genderize.io",
   "nationalize": "https://api.nationalize.io",
-  "github": "https://api.github.com"
+  "github": "https://api.github.com",
+  "openLibrary": "https://openlibrary.org"
 }
 ```
 
@@ -146,6 +149,7 @@ free-apis/
 │   ├── jikan.json
 │   ├── mockData.json
 │   ├── nationalize.json
+│   ├── openLibrary.json
 │   ├── openMeteo.json
 │   ├── pokemon.json
 │   ├── restCountries.json
@@ -164,6 +168,7 @@ free-apis/
 │   ├── jikan.js
 │   ├── mockData.js
 │   ├── nationalize.js
+│   ├── openLibrary.js
 │   ├── OpenMeteo.js
 │   ├── pokemon.js
 │   ├── restCountries.js

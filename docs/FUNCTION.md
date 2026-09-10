@@ -128,6 +128,14 @@ Express
            │
            ▼
        GitHub REST API
+
+    /open-library
+           │
+           ▼
+      OpenLibrary
+           │
+           ▼
+      Open Library API
 ```
 
 The application follows a simple controller/service architecture.
@@ -1185,6 +1193,63 @@ The route defaults `type` to `users`. Invalid types and missing required path
 parameters return `400`. The service sends GitHub's recommended media type and
 API version headers, optionally uses `GITHUB_TOKEN`, applies a configured
 15-second timeout, and parses JSON, text, and binary upstream responses.
+
+---
+
+# OpenLibrary Service
+
+File:
+
+```text
+openLibrary.js
+```
+
+Class:
+
+```js
+OpenLibrary
+```
+
+The OpenLibrary service consumes the endpoint mappings configured in:
+
+```text
+jsons/openLibrary.json
+```
+
+Supported operations include book search, work lookup, edition lookup, author
+lookup, subject lookup, and ISBN lookup through the Open Library API.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, substitutes `value` path parameters such as
+`{id}`, `{subject}`, or `{isbn}`, forwards query parameters, performs the
+upstream request, and returns a standardized response.
+
+Example:
+
+```js
+await openLibrary.init({
+  type: "search",
+  value: "pride and prejudice",
+  query: {
+    limit: 5
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /open-library?type=search&q=pride+and+prejudice
+```
+
+The route defaults `type` to `search`. Invalid types and missing required
+`value` parameters return `400`. The service applies a configured 15-second
+timeout and parses JSON, text, and binary upstream responses.
 
 ---
 

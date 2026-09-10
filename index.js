@@ -17,6 +17,7 @@ const {
   ipify,
   agify,
   genderize,
+  openLibrary,
 } = require("./dependencyMap");
 
 const app = express();
@@ -225,38 +226,25 @@ app.get("/agify", async (req, res) => {
 
 app.get("/genderize", async (req, res) => {
   const { type = "gender", ...query } = req.query;
-
-  const data = await genderize.init({
-    type,
-    query,
-  });
-
+  const data = await genderize.init({ type, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 
 app.get("/nationalize", async (req, res) => {
   const { type = "nationality", ...query } = req.query;
-
-  const data = await nationalize.init({
-    type,
-    query,
-  });
-
+  const data = await nationalize.init({ type, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 
 app.get("/github", async (req, res) => {
   const { type = "users", value, owner, repo, username, ...query } = req.query;
+  const data = await github.init({ type, value, owner, repo, username, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
 
-  const data = await github.init({
-    type,
-    value,
-    owner,
-    repo,
-    username,
-    query,
-  });
-
+app.get("/open-library", async (req, res) => {
+  const { type = "search", value, ...query } = req.query;
+  const data = await openLibrary.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

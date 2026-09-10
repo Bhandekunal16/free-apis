@@ -1,0 +1,11 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "search": "/search.json",
+    "work": "/works/{id}.json",
+    "edition": "/books/{id}.json",
+    "author": "/authors/{id}.json",
+    "subject": "/subjects/{subject}.json",
+    "isbn": "/isbn/{isbn}.json"
+  }
+}

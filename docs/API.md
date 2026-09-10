@@ -948,7 +948,47 @@ Requests use a 15-second timeout.
 
 ---
 
-# 16. Weather API
+# 16. Open Library API
+
+The Open Library API provides book, edition, author, subject, and ISBN metadata.
+
+Configured upstream API:
+
+```text
+https://openlibrary.org
+```
+
+## Supported Types
+
+| Type | Required parameters | Description |
+| ---- | ------------------- | ----------- |
+| `search` | Optional `q` or `title` | Search by query string |
+| `work` | `value` | Get a work by Open Library ID |
+| `edition` | `value` | Get an edition by Open Library ID |
+| `author` | `value` | Get an author by Open Library ID |
+| `subject` | `value` | Get a subject listing |
+| `isbn` | `value` | Get ISBN metadata |
+
+## Examples
+
+```http
+GET /open-library
+GET /open-library?type=search&q=pride+and+prejudice
+GET /open-library?type=work&value=OL45804W
+GET /open-library?type=edition&value=OL7353617M
+GET /open-library?type=author&value=OL23919A
+GET /open-library?type=subject&value=science_fiction
+GET /open-library?type=isbn&value=9780140328721
+```
+
+The default type is `search`. When a type requires an identifier, the service
+validates that `value` is present and returns `400` if it is missing. Query
+parameters are forwarded to Open Library, and a 15-second timeout is applied to
+upstream requests.
+
+---
+
+# 17. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -1024,7 +1064,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 17. HTTP Status Codes
+# 18. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -1037,7 +1077,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 18. Error Response
+# 19. Error Response
 
 Example:
 
@@ -1052,7 +1092,7 @@ Example:
 
 ---
 
-# 19. Request Examples
+# 20. Request Examples
 
 ## Fake users
 
@@ -1246,8 +1286,20 @@ curl "http://localhost:3000/github?type=repos&owner=octocat&repo=Hello-World"
 curl "http://localhost:3000/github?type=searchRepositories&q=javascript"
 ```
 
+## Open Library book search
+
+```bash
+curl "http://localhost:3000/open-library?type=search&q=pride+and+prejudice"
+```
+
+## Open Library work by ID
+
+```bash
+curl "http://localhost:3000/open-library?type=work&value=OL45804W"
+```
+
 ---
-# 20. Route Summary
+# 21. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1270,6 +1322,7 @@ curl "http://localhost:3000/github?type=searchRepositories&q=javascript"
 | `GET`  | `/genderize`               | Gender prediction      |
 | `GET`  | `/nationalize`              | Nationality prediction |
 | `GET`  | `/github`                  | GitHub API lookup      |
+| `GET`  | `/open-library`            | Open Library lookup    |
 
 All currently supported endpoints are read-only.
 
