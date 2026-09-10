@@ -1,0 +1,14 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "random": "/random.php",
+    "randomSelection": "/randomselection.php",
+    "lookup": "/lookup.php",
+    "search": "/search.php",
+    "filter": "/filter.php",
+    "categories": "/categories.php",
+    "categoryList": "/list.php",
+    "areas": "/list.php",
+    "ingredients": "/list.php"
+  }
+}

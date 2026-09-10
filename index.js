@@ -20,6 +20,7 @@ const {
   openLibrary,
   gutendex,
   openFoodFacts,
+  mealDB,
 } = require("./dependencyMap");
 
 const app = express();
@@ -258,7 +259,13 @@ app.get("/gutendex", async (req, res) => {
 
 app.get("/open-food-facts", async (req, res) => {
   const { type = "product", value, ...query } = req.query;
-  const data = await openFoodFacts.init({type, value, query});
+  const data = await openFoodFacts.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/meal-db", async (req, res) => {
+  const { type = "random", value, ...query } = req.query;
+  const data = await mealDB.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

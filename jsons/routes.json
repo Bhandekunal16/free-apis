@@ -16,5 +16,6 @@
   "nationalize": "https://api.nationalize.io",
   "openLibrary": "https://openlibrary.org",
   "gutendex": "https://gutendex.com",
-  "openFoodFacts": "https://world.openfoodfacts.org/api/v2"
+  "openFoodFacts": "https://world.openfoodfacts.org/api/v2",
+   "mealDB": "https://www.themealdb.com/api/json/v1/1"
 }
