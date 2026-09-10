@@ -18,7 +18,7 @@ const {
   agify,
   genderize,
   openLibrary,
-  gutendex
+  gutendex,
 } = require("./dependencyMap");
 
 const app = express();
