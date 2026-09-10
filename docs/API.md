@@ -988,7 +988,40 @@ upstream requests.
 
 ---
 
-# 17. Weather API
+# 17. Gutendex API
+
+The Gutendex API provides public-domain book metadata and catalog search from
+the Project Gutenberg collection.
+
+Configured upstream API:
+
+```text
+https://gutendex.com
+```
+
+## Supported Types
+
+| Type | Required parameters | Description |
+| ---- | ------------------- | ----------- |
+| `books` | None | List books with optional filters |
+| `book` | `value` | Get a specific book by ID |
+
+## Examples
+
+```http
+GET /gutendex
+GET /gutendex?type=books&search=frankenstein
+GET /gutendex?type=book&value=11
+```
+
+The default type is `books`. When a type requires an identifier, the service
+validates that `value` is present and returns `400` if it is missing. Query
+parameters are forwarded to Gutendex, and a 15-second timeout is applied to
+upstream requests.
+
+---
+
+# 18. Weather API
 
 The Weather API provides access to Open-Meteo forecast data.
 
@@ -1064,7 +1097,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 18. HTTP Status Codes
+# 19. HTTP Status Codes
 
 | Status | Meaning                                 |
 | -----: | --------------------------------------- |
@@ -1077,7 +1110,7 @@ GET /weather?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code&
 
 ---
 
-# 19. Error Response
+# 20. Error Response
 
 Example:
 
@@ -1092,7 +1125,7 @@ Example:
 
 ---
 
-# 20. Request Examples
+# 21. Request Examples
 
 ## Fake users
 
@@ -1298,8 +1331,20 @@ curl "http://localhost:3000/open-library?type=search&q=pride+and+prejudice"
 curl "http://localhost:3000/open-library?type=work&value=OL45804W"
 ```
 
+## Gutenberg books search
+
+```bash
+curl "http://localhost:3000/gutendex?type=books&search=frankenstein"
+```
+
+## Gutenberg book by ID
+
+```bash
+curl "http://localhost:3000/gutendex?type=book&value=11"
+```
+
 ---
-# 21. Route Summary
+# 22. Route Summary
 
 | Method | Route                      | Purpose                  |
 | ------ | -------------------------- | ------------------------ |
@@ -1323,6 +1368,7 @@ curl "http://localhost:3000/open-library?type=work&value=OL45804W"
 | `GET`  | `/nationalize`              | Nationality prediction |
 | `GET`  | `/github`                  | GitHub API lookup      |
 | `GET`  | `/open-library`            | Open Library lookup    |
+| `GET`  | `/gutendex`                | Gutenberg catalog lookup |
 
 All currently supported endpoints are read-only.
 

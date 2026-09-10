@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides sixteen API groups:
+The project currently provides seventeen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -20,6 +20,7 @@ The project currently provides sixteen API groups:
 * **Nationalize API** — consumes [Nationalize](https://nationalize.io/)
 * **GitHub API** — consumes [GitHub REST API](https://docs.github.com/en/rest)
 * **Open Library API** — consumes [Open Library](https://openlibrary.org/)
+* **Gutenberg API** — consumes [Gutenberg Project API](https://gutendex.com/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -44,6 +45,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Nationality prediction from names via Nationalize
 * GitHub users, repositories, searches, and repository metadata
 * Book, author, edition, subject, and ISBN metadata via Open Library
+* Public domain book metadata and catalog search via Gutendex
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -121,7 +123,8 @@ Example:
   "genderize": "https://api.genderize.io",
   "nationalize": "https://api.nationalize.io",
   "github": "https://api.github.com",
-  "openLibrary": "https://openlibrary.org"
+  "openLibrary": "https://openlibrary.org",
+  "gutendex": "https://gutendex.com"
 }
 ```
 
@@ -145,6 +148,7 @@ free-apis/
 │   ├── fakeData.json
 │   ├── genderize.json
 │   ├── github.json
+│   ├── gutendex.json
 │   ├── ipify.json
 │   ├── jikan.json
 │   ├── mockData.json
@@ -164,6 +168,7 @@ free-apis/
 │   ├── fakeData.js
 │   ├── genderize.js
 │   ├── github.js
+│   ├── gutendex.js
 │   ├── ipify.js
 │   ├── jikan.js
 │   ├── mockData.js

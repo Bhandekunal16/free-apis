@@ -14,5 +14,6 @@
   "agify": "https://api.agify.io",
   "genderize": "https://api.genderize.io",
   "nationalize": "https://api.nationalize.io",
-  "openLibrary": "https://openlibrary.org"
+  "openLibrary": "https://openlibrary.org",
+   "gutendex": "https://gutendex.com"
 }

@@ -17,6 +17,7 @@ const Genderize = require("./service/genderize");
 const Nationalize = require("./service/nationalize");
 const Github = require("./service/github");
 const OpenLibrary = require("./service/openLibrary");
+const Gutendex = require("./service/gutendex");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -34,6 +35,7 @@ const genderize = new Genderize();
 const nationalize = new Nationalize();
 const github = new Github();
 const openLibrary = new OpenLibrary();
+const gutendex = new Gutendex();
 
 module.exports = {
   github,
@@ -52,4 +54,5 @@ module.exports = {
   agify,
   genderize,
   openLibrary,
+  gutendex,
 };

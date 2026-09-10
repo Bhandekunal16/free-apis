@@ -18,6 +18,7 @@ const {
   agify,
   genderize,
   openLibrary,
+  gutendex
 } = require("./dependencyMap");
 
 const app = express();
@@ -245,6 +246,12 @@ app.get("/github", async (req, res) => {
 app.get("/open-library", async (req, res) => {
   const { type = "search", value, ...query } = req.query;
   const data = await openLibrary.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/gutendex", async (req, res) => {
+  const { type = "books", value, ...query } = req.query;
+  const data = await gutendex.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

@@ -136,6 +136,14 @@ Express
            │
            ▼
       Open Library API
+
+    /gutendex
+           │
+           ▼
+      Gutendex
+           │
+           ▼
+      Gutenberg API
 ```
 
 The application follows a simple controller/service architecture.
@@ -1248,6 +1256,62 @@ GET /open-library?type=search&q=pride+and+prejudice
 ```
 
 The route defaults `type` to `search`. Invalid types and missing required
+`value` parameters return `400`. The service applies a configured 15-second
+timeout and parses JSON, text, and binary upstream responses.
+
+---
+
+# Gutendex Service
+
+File:
+
+```text
+gutendex.js
+```
+
+Class:
+
+```js
+Gutendex
+```
+
+The Gutendex service consumes the endpoint mappings configured in:
+
+```text
+jsons/gutendex.json
+```
+
+Supported operations include listing books and fetching a specific book by ID.
+
+## `init()`
+
+```js
+async init(options)
+```
+
+Validates the requested operation, substitutes the `value` path parameter for
+book IDs when required, forwards query parameters, performs the upstream
+request, and returns a standardized response.
+
+Example:
+
+```js
+await gutendex.init({
+  type: "books",
+  query: {
+    search: "frankenstein",
+    page: 1
+  }
+});
+```
+
+The public controller maps this service to:
+
+```http
+GET /gutendex?type=books&search=frankenstein&page=1
+```
+
+The route defaults `type` to `books`. Invalid types and missing required
 `value` parameters return `400`. The service applies a configured 15-second
 timeout and parses JSON, text, and binary upstream responses.
 
