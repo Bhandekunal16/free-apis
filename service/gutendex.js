@@ -89,7 +89,7 @@ class Gutendex {
         method: "GET",
         headers: {
           Accept: "application/json",
-        //   "User-Agent": "Free-API-Server/1.0",
+          "User-Agent": "Free-API-Server/1.0",
         },
         redirect: "follow",
         signal: controller.signal,
