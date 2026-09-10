@@ -1,0 +1,15 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "random": "/random.php",
+    "randomMultiple": "/randomselection.php",
+    "lookup": "/lookup.php",
+    "search": "/search.php",
+    "filter": "/filter.php",
+    "categories": "/list.php",
+    "glass": "/list.php",
+    "ingredients": "/list.php",
+    "alcoholic": "/list.php"
+  }
+}
+

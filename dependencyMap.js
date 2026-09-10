@@ -20,6 +20,7 @@ const OpenLibrary = require("./service/openLibrary");
 const Gutendex = require("./service/gutendex");
 const OpenFoodFacts = require("./service/OpenFoodFacts");
 const MealDB = require("./service/MealDB");
+const CocktailDB = require("./service/CocktailDB");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -59,4 +60,5 @@ module.exports = {
   gutendex,
   openFoodFacts: new OpenFoodFacts(),
   mealDB: new MealDB(),
+  cocktailDB: new CocktailDB(),
 };
