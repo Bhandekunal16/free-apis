@@ -129,46 +129,56 @@ Example:
 ```text
 free-apis/
 │
-├── jsons/
-│   ├── app.json
-│   ├── routes.json
-│   ├── fakeData.json
-│   ├── mockData.json
-│   ├── openMeteo.json
-│   ├── restCountries.json
-│   ├── pokemon.json
-│   ├── rickAndMorty.json
-│   ├── catFacts.json
-│   ├── dogApi.json
-│   ├── jikan.json
-│   ├── coingecko.json
-│   ├── ipify.json
-│   ├── agify.json
-│   ├── genderize.json
-│   ├── nationalize.json
-│   └── github.json
+├── .vercel/
+│   ├── project.json
+│   └── README.txt
 │
-├── fakeData.js
-├── mockData.js
-├── OpenMeteo.js
-├── restCountries.js
-├── pokemon.js
-├── rickAndMorty.js
-├── catFacts.js
-├── dogApi.js
-├── jikan.js
-├── coingecko.js
-├── ipify.js
-├── agify.js
-├── genderize.js
-├── nationalize.js
-├── github.js
-├── index.js
-├── package.json
-├── README.md
+├── jsons/
+│   ├── agify.json
+│   ├── app.json
+│   ├── catFacts.json
+│   ├── coingecko.json
+│   ├── dogApi.json
+│   ├── fakeData.json
+│   ├── genderize.json
+│   ├── github.json
+│   ├── ipify.json
+│   ├── jikan.json
+│   ├── mockData.json
+│   ├── nationalize.json
+│   ├── openMeteo.json
+│   ├── pokemon.json
+│   ├── restCountries.json
+│   ├── rickAndMorty.json
+│   └── routes.json
+│
+├── service/
+│   ├── agify.js
+│   ├── catFacts.js
+│   ├── coingecko.js
+│   ├── dogApi.js
+│   ├── fakeData.js
+│   ├── genderize.js
+│   ├── github.js
+│   ├── ipify.js
+│   ├── jikan.js
+│   ├── mockData.js
+│   ├── nationalize.js
+│   ├── OpenMeteo.js
+│   ├── pokemon.js
+│   ├── restCountries.js
+│   └── rickAndMorty.js
+│
+├── .gitignore
 ├── API.md
 ├── FUNCTION.md
-└── .gitignore
+├── README.md
+├── dependencyMap.js
+├── index.js
+├── package-lock.json
+├── package.json
+├── vercel.json
+└── vercel.process.sh
 ```
 
 ---
