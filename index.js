@@ -19,6 +19,7 @@ const {
   genderize,
   openLibrary,
   gutendex,
+  openFoodFacts,
 } = require("./dependencyMap");
 
 const app = express();
@@ -252,6 +253,12 @@ app.get("/open-library", async (req, res) => {
 app.get("/gutendex", async (req, res) => {
   const { type = "books", value, ...query } = req.query;
   const data = await gutendex.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/open-food-facts", async (req, res) => {
+  const { type = "product", value, ...query } = req.query;
+  const data = await openFoodFacts.init({type, value, query});
   res.status(data.statusCode ?? 200).json(data);
 });
 

@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides seventeen API groups:
+The project currently provides eighteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -21,6 +21,7 @@ The project currently provides seventeen API groups:
 * **GitHub API** — consumes [GitHub REST API](https://docs.github.com/en/rest)
 * **Open Library API** — consumes [Open Library](https://openlibrary.org/)
 * **Gutenberg API** — consumes [Gutenberg Project API](https://gutendex.com/)
+* **Open Food Facts API** — consumes [Open Food Facts](https://world.openfoodfacts.org/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -46,6 +47,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * GitHub users, repositories, searches, and repository metadata
 * Book, author, edition, subject, and ISBN metadata via Open Library
 * Public domain book metadata and catalog search via Gutendex
+* Food product, category, brand, country, ingredient, additive, allergen, label, and packaging data via Open Food Facts
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -124,7 +126,8 @@ Example:
   "nationalize": "https://api.nationalize.io",
   "github": "https://api.github.com",
   "openLibrary": "https://openlibrary.org",
-  "gutendex": "https://gutendex.com"
+  "gutendex": "https://gutendex.com",
+  "openFoodFacts": "https://world.openfoodfacts.org/api/v2"
 }
 ```
 
@@ -153,6 +156,7 @@ free-apis/
 │   ├── jikan.json
 │   ├── mockData.json
 │   ├── nationalize.json
+│   ├── openFoodFacts.json
 │   ├── openLibrary.json
 │   ├── openMeteo.json
 │   ├── pokemon.json
@@ -173,6 +177,7 @@ free-apis/
 │   ├── jikan.js
 │   ├── mockData.js
 │   ├── nationalize.js
+│   ├── openFoodFacts.js
 │   ├── openLibrary.js
 │   ├── OpenMeteo.js
 │   ├── pokemon.js
@@ -724,6 +729,55 @@ Example response:
 }
 ```
 ```
+
+---
+
+## Open Food Facts API
+
+The `/open-food-facts` endpoint consumes data from Open Food Facts.
+
+Configured endpoint mappings:
+
+```json
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "product": "/product/{barcode}",
+    "products": "/search",
+    "categories": "/categories",
+    "brands": "/brands",
+    "countries": "/countries",
+    "ingredients": "/ingredients",
+    "additives": "/additives",
+    "allergens": "/allergens",
+    "labels": "/labels",
+    "packaging": "/packaging"
+  }
+}
+```
+
+The default type is `product`. The `product` type uses `value` as the barcode
+path parameter. The remaining types map to their configured collection
+endpoints, and query parameters are forwarded to Open Food Facts.
+
+Examples:
+
+```http
+GET /open-food-facts
+GET /open-food-facts?type=product&value=737628064502
+GET /open-food-facts?type=products&search_terms=milk
+GET /open-food-facts?type=categories
+GET /open-food-facts?type=brands
+GET /open-food-facts?type=countries
+GET /open-food-facts?type=ingredients
+GET /open-food-facts?type=additives
+GET /open-food-facts?type=allergens
+GET /open-food-facts?type=labels
+GET /open-food-facts?type=packaging
+```
+
+The service applies a 15-second upstream timeout. Unsupported types and missing
+required `value` for the `product` endpoint return `400`.
 
 ---
 

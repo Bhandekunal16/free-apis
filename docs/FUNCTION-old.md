@@ -150,17 +150,6 @@ Express
            ▼
      OpenFoodFacts
            │
-           ├── /product/{barcode}
-           ├── /search
-           ├── /categories
-           ├── /brands
-           ├── /countries
-           ├── /ingredients
-           ├── /additives
-           ├── /allergens
-           ├── /labels
-           └── /packaging
-           │
            ▼
     Open Food Facts API
 ```
@@ -1333,101 +1322,6 @@ GET /gutendex?type=books&search=frankenstein&page=1
 The route defaults `type` to `books`. Invalid types and missing required
 `value` parameters return `400`. The service applies a configured 15-second
 timeout and parses JSON, text, and binary upstream responses.
-
----
-
-# OpenFoodFacts Service
-
-File:
-
-```text
-openFoodFacts.js
-```
-
-Class:
-
-```js
-OpenFoodFacts
-```
-
-The OpenFoodFacts service consumes Open Food Facts endpoints using the
-configured endpoint map and a 15-second default timeout.
-
-## Endpoint Configuration
-
-```json
-{
-  "defaultTimeout": 15000,
-  "endpoints": {
-    "product": "/product/{barcode}",
-    "products": "/search",
-    "categories": "/categories",
-    "brands": "/brands",
-    "countries": "/countries",
-    "ingredients": "/ingredients",
-    "additives": "/additives",
-    "allergens": "/allergens",
-    "labels": "/labels",
-    "packaging": "/packaging"
-  }
-}
-```
-
-## `init()`
-
-```js
-async init(options)
-```
-
-Validates the requested endpoint type, builds the configured upstream path,
-forwards query parameters, performs the upstream request, and returns a
-standardized response.
-
-Example:
-
-```js
-await openFoodFacts.init({
-  type: "product",
-  value: "737628064502"
-});
-```
-
-The `product` endpoint maps `value` to the `{barcode}` path parameter:
-
-```text
-/product/737628064502
-```
-
-Collection endpoints do not require a path value:
-
-```js
-await openFoodFacts.init({
-  type: "products",
-  query: {
-    search_terms: "milk"
-  }
-});
-```
-
-The public controller maps this service to:
-
-```http
-GET /open-food-facts?type=product&value=737628064502
-GET /open-food-facts?type=products&search_terms=milk
-GET /open-food-facts?type=categories
-GET /open-food-facts?type=brands
-GET /open-food-facts?type=countries
-GET /open-food-facts?type=ingredients
-GET /open-food-facts?type=additives
-GET /open-food-facts?type=allergens
-GET /open-food-facts?type=labels
-GET /open-food-facts?type=packaging
-```
-
-The route defaults `type` to `product`. The `product` endpoint requires
-`value`; unsupported types or missing required values return `400`. Query
-parameters are forwarded to the selected Open Food Facts endpoint. The service
-uses the configured 15-second timeout.
 
 ---
 

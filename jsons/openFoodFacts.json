@@ -1,0 +1,17 @@
+{
+  "defaultTimeout": 30000,
+  "endpoints": {
+    "product": "/product/{barcode}",
+    "products": "/search",
+    "category": "/search",
+     "brand": "/search",
+    "categories": "/categories",
+    "brands": "/brands",
+    "countries": "/countries",
+    "ingredients": "/ingredients",
+    "additives": "/additives",
+    "allergens": "/allergens",
+    "labels": "/labels",
+    "packaging": "/packaging"
+  }
+}

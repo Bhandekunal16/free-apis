@@ -1023,8 +1023,8 @@ upstream requests.
 
 # 18. Open Food Facts API
 
-The Open Food Facts API exposes product, product search, category, brand,
-country, ingredient, additive, allergen, label, and packaging data.
+The Open Food Facts API exposes product metadata, categories, ingredients,
+labels, and brand information for packaged food products.
 
 Configured upstream API:
 
@@ -1032,43 +1032,26 @@ Configured upstream API:
 https://world.openfoodfacts.org/api/v2
 ```
 
-## Endpoint Configuration
-
-```json
-{
-  "defaultTimeout": 15000,
-  "endpoints": {
-    "product": "/product/{barcode}",
-    "products": "/search",
-    "categories": "/categories",
-    "brands": "/brands",
-    "countries": "/countries",
-    "ingredients": "/ingredients",
-    "additives": "/additives",
-    "allergens": "/allergens",
-    "labels": "/labels",
-    "packaging": "/packaging"
-  }
-}
-```
-
 ## Supported Types
 
-| Type | Upstream path | Required parameters | Description |
-| ---- | ------------- | -------------------- | ----------- |
-| `product` | `/product/{barcode}` | `value` | Get product details by barcode |
-| `products` | `/search` | None | Search products |
-| `categories` | `/categories` | None | List product categories |
-| `brands` | `/brands` | None | List brands |
-| `countries` | `/countries` | None | List countries |
-| `ingredients` | `/ingredients` | None | List ingredients |
-| `additives` | `/additives` | None | List additives |
-| `allergens` | `/allergens` | None | List allergens |
-| `labels` | `/labels` | None | List labels |
-| `packaging` | `/packaging` | None | List packaging entries |
-
-For `product`, the local `value` is used as the `{barcode}` path parameter.
-All other endpoint-specific parameters are forwarded as query parameters.
+| Type | Required parameters | Description |
+| ---- | ------------------- | ----------- |
+| `product` | `value` | Get product details by barcode |
+| `products` | Optional search filters | Search products by query |
+| `categories` | None | List known product categories |
+| `category` | `value` | Get category metadata |
+| `brands` | None | List brands |
+| `brand` | `value` | Get brand metadata |
+| `ingredients` | None | List ingredients |
+| `ingredient` | `value` | Get ingredient metadata |
+| `additives` | None | List additives |
+| `additive` | `value` | Get additive metadata |
+| `allergens` | None | List allergens |
+| `allergen` | `value` | Get allergen metadata |
+| `labels` | None | List labels |
+| `label` | `value` | Get label metadata |
+| `packaging` | None | List packaging entries |
+| `packagingMaterial` | `value` | Get packaging material metadata |
 
 ## Examples
 
@@ -1076,20 +1059,14 @@ All other endpoint-specific parameters are forwarded as query parameters.
 GET /open-food-facts
 GET /open-food-facts?type=product&value=737628064502
 GET /open-food-facts?type=products&search_terms=milk
-GET /open-food-facts?type=categories
-GET /open-food-facts?type=brands
-GET /open-food-facts?type=countries
-GET /open-food-facts?type=ingredients
-GET /open-food-facts?type=additives
-GET /open-food-facts?type=allergens
-GET /open-food-facts?type=labels
-GET /open-food-facts?type=packaging
+GET /open-food-facts?type=category&value=beverages
+GET /open-food-facts?type=brand&value=nestle
 ```
 
-The default type is `product`. The `product` type requires `value` because it
-maps to the `{barcode}` path parameter. Unsupported types or missing required
-values return `400`. The service applies the configured 15-second timeout to
-upstream requests.
+The default type is `product`. When a type requires an identifier, the service
+validates that `value` is present and returns `400` if it is missing. Query
+parameters are forwarded to Open Food Facts, and a 15-second timeout is applied
+to upstream requests.
 
 ---
 
@@ -1419,20 +1396,6 @@ curl "http://localhost:3000/gutendex?type=book&value=11"
 
 ```bash
 curl "http://localhost:3000/open-food-facts?type=product&value=737628064502"
-```
-
-## Open Food Facts endpoint examples
-
-```bash
-curl "http://localhost:3000/open-food-facts?type=products&search_terms=milk"
-curl "http://localhost:3000/open-food-facts?type=categories"
-curl "http://localhost:3000/open-food-facts?type=brands"
-curl "http://localhost:3000/open-food-facts?type=countries"
-curl "http://localhost:3000/open-food-facts?type=ingredients"
-curl "http://localhost:3000/open-food-facts?type=additives"
-curl "http://localhost:3000/open-food-facts?type=allergens"
-curl "http://localhost:3000/open-food-facts?type=labels"
-curl "http://localhost:3000/open-food-facts?type=packaging"
 ```
 
 ---

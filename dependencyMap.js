@@ -18,6 +18,7 @@ const Nationalize = require("./service/nationalize");
 const Github = require("./service/github");
 const OpenLibrary = require("./service/openLibrary");
 const Gutendex = require("./service/gutendex");
+const OpenFoodFacts = require("./service/OpenFoodFacts");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -55,4 +56,5 @@ module.exports = {
   genderize,
   openLibrary,
   gutendex,
+  openFoodFacts: new OpenFoodFacts(),
 };

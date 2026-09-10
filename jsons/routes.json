@@ -15,5 +15,6 @@
   "genderize": "https://api.genderize.io",
   "nationalize": "https://api.nationalize.io",
   "openLibrary": "https://openlibrary.org",
-  "gutendex": "https://gutendex.com"
+  "gutendex": "https://gutendex.com",
+  "openFoodFacts": "https://world.openfoodfacts.org/api/v2"
 }
