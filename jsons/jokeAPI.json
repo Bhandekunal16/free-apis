@@ -1,0 +1,10 @@
+{
+  "defaultTimeout": 30000,
+  "endpoints": {
+    "random": "/joke",
+    "joke": "/joke",
+    "category": "/joke",
+    "categories": "/joke",
+    "filter": "/joke"
+  }
+}

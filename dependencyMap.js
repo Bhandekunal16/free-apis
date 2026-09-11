@@ -21,6 +21,7 @@ const Gutendex = require("./service/gutendex");
 const OpenFoodFacts = require("./service/OpenFoodFacts");
 const MealDB = require("./service/MealDB");
 const CocktailDB = require("./service/CocktailDB");
+const jokeAPI = require("./service/JokeAPI");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -61,4 +62,5 @@ module.exports = {
   openFoodFacts: new OpenFoodFacts(),
   mealDB: new MealDB(),
   cocktailDB: new CocktailDB(),
+  jokeAPI: new jokeAPI(),
 };

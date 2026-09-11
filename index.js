@@ -21,7 +21,8 @@ const {
   gutendex,
   openFoodFacts,
   mealDB,
-  cocktailDB
+  cocktailDB,
+  jokeAPI,
 } = require("./dependencyMap");
 
 const app = express();
@@ -273,6 +274,12 @@ app.get("/meal-db", async (req, res) => {
 app.get("/cocktail-db", async (req, res) => {
   const { type = "random", value, ...query } = req.query;
   const data = await cocktailDB.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/joke-api", async (req, res) => {
+  const { type = "random", value, ...query } = req.query;
+  const data = await jokeAPI.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 
