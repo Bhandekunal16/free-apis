@@ -1,0 +1,15 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "new": "/new",
+    "newShuffle": "/new/shuffle",
+    "draw": "/draw",
+    "shuffle": "/shuffle",
+    "return": "/return",
+    "pileAdd": "/pile",
+    "pileShuffle": "/pile",
+    "pileList": "/pile",
+    "pileDraw": "/pile",
+    "pileReturn": "/pile"
+  }
+}

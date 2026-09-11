@@ -22,5 +22,6 @@
   "jokeAPI": "https://v2.jokeapi.dev",
   "officialJoke": "https://official-joke-api.appspot.com",
   "randomUser": "https://randomuser.me/api",
-  "bored": "https://bored-api.appbrewery.com"
+  "bored": "https://bored-api.appbrewery.com",
+  "deckOfCards": "https://deckofcardsapi.com/api/deck"
 }

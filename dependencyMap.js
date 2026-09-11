@@ -25,6 +25,7 @@ const jokeAPI = require("./service/JokeAPI");
 const OfficialJoke = require("./service/OfficialJoke");
 const RandomUser = require("./service/RandomUser");
 const Bored = require("./service/Bored");
+const DeckOfCards = require("./service/DeckOfCards");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -68,5 +69,6 @@ module.exports = {
   jokeAPI: new jokeAPI(),
   officialJoke: new OfficialJoke(),
   randomUser : new RandomUser(),
-  bored : new Bored()
+  bored : new Bored(),
+  deckOfCards : new DeckOfCards()
 };
