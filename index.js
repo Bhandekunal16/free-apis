@@ -27,6 +27,7 @@ const {
   randomUser,
   bored,
   deckOfCards,
+  chess
 } = require("./dependencyMap");
 
 const app = express();
@@ -308,6 +309,34 @@ app.get("/bored", async (req, res) => {
 app.get("/deck-of-cards", async (req, res) => {
   const { type = "newShuffle", deckId, pileName, value, ...query } = req.query;
   const data = await deckOfCards.init({ type, deckId, pileName, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/chess", async (req, res) => {
+  const {
+    type = "dailyPuzzle",
+    username,
+    club,
+    country,
+    year,
+    month,
+    title,
+    value,
+    ...query
+  } = req.query;
+
+  const data = await chess.init({
+    type,
+    username,
+    club,
+    country,
+    year,
+    month,
+    title,
+    value,
+    query,
+  });
+
   res.status(data.statusCode ?? 200).json(data);
 });
 

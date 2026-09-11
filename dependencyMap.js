@@ -26,6 +26,7 @@ const OfficialJoke = require("./service/OfficialJoke");
 const RandomUser = require("./service/RandomUser");
 const Bored = require("./service/Bored");
 const DeckOfCards = require("./service/DeckOfCards");
+const Chess = require("./service/Chess");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -70,5 +71,6 @@ module.exports = {
   officialJoke: new OfficialJoke(),
   randomUser : new RandomUser(),
   bored : new Bored(),
-  deckOfCards : new DeckOfCards()
+  deckOfCards : new DeckOfCards(),
+  chess : new Chess()
 };

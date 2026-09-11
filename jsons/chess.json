@@ -1,0 +1,22 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "player": "/player",
+    "playerStats": "/player",
+    "playerGames": "/player",
+    "playerArchives": "/player",
+    "club": "/club",
+    "clubMembers": "/club",
+    "clubMatches": "/club",
+    "country": "/country",
+    "countryPlayers": "/country",
+    "countryClubs": "/country",
+    "titled": "/titled",
+    "leaderboards": "/leaderboards",
+    "streamers": "/streamers",
+    "dailyPuzzle": "/puzzle",
+    "randomPuzzle": "/puzzle",
+    "puzzle": "/puzzle",
+    "game": "/game"
+  }
+}
