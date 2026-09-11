@@ -1,0 +1,8 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "random": "/random",
+    "filter": "/filter",
+    "activity": "/activity"
+  }
+}

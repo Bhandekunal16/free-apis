@@ -25,6 +25,7 @@ const {
   jokeAPI,
   officialJoke,
   randomUser,
+  bored,
 } = require("./dependencyMap");
 
 const app = express();
@@ -294,6 +295,12 @@ app.get("/official-joke", async (req, res) => {
 app.get("/random-user", async (req, res) => {
   const { type = "random", ...query } = req.query;
   const data = await randomUser.init({ type, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/bored", async (req, res) => {
+  const { operation = "random", value, ...query } = req.query;
+  const data = await bored.init({ type: operation, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

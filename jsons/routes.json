@@ -21,5 +21,6 @@
   "cocktailDB": "https://www.thecocktaildb.com/api/json/v1/1",
   "jokeAPI": "https://v2.jokeapi.dev",
   "officialJoke": "https://official-joke-api.appspot.com",
-  "randomUser": "https://randomuser.me/api"
+  "randomUser": "https://randomuser.me/api",
+  "bored": "https://bored-api.appbrewery.com"
 }
