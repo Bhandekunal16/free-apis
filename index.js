@@ -24,6 +24,7 @@ const {
   cocktailDB,
   jokeAPI,
   officialJoke,
+  randomUser,
 } = require("./dependencyMap");
 
 const app = express();
@@ -287,6 +288,12 @@ app.get("/joke-api", async (req, res) => {
 app.get("/official-joke", async (req, res) => {
   const { type = "random", value, ...query } = req.query;
   const data = await officialJoke.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/random-user", async (req, res) => {
+  const { type = "random", ...query } = req.query;
+  const data = await randomUser.init({ type, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

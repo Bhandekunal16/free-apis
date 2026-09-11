@@ -23,6 +23,7 @@ const MealDB = require("./service/MealDB");
 const CocktailDB = require("./service/CocktailDB");
 const jokeAPI = require("./service/JokeAPI");
 const OfficialJoke = require("./service/OfficialJoke");
+const RandomUser = require("./service/RandomUser");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -65,4 +66,5 @@ module.exports = {
   cocktailDB: new CocktailDB(),
   jokeAPI: new jokeAPI(),
   officialJoke: new OfficialJoke(),
+  randomUser : new RandomUser()
 };

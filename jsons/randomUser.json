@@ -1,0 +1,7 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "random": "/",
+    "users": "/"
+  }
+}
