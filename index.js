@@ -23,6 +23,7 @@ const {
   mealDB,
   cocktailDB,
   jokeAPI,
+  officialJoke,
 } = require("./dependencyMap");
 
 const app = express();
@@ -280,6 +281,12 @@ app.get("/cocktail-db", async (req, res) => {
 app.get("/joke-api", async (req, res) => {
   const { type = "random", value, ...query } = req.query;
   const data = await jokeAPI.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/official-joke", async (req, res) => {
+  const { type = "random", value, ...query } = req.query;
+  const data = await officialJoke.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

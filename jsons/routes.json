@@ -19,5 +19,6 @@
   "openFoodFacts": "https://world.openfoodfacts.org/api/v2",
   "mealDB": "https://www.themealdb.com/api/json/v1/1",
   "cocktailDB": "https://www.thecocktaildb.com/api/json/v1/1",
-  "jokeAPI": "https://v2.jokeapi.dev"
+  "jokeAPI": "https://v2.jokeapi.dev",
+  "officialJoke": "https://official-joke-api.appspot.com"
 }

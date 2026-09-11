@@ -1,0 +1,12 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "random": "/random_joke",
+    "randomTen": "/random_ten",
+    "randomMultiple": "/jokes/random",
+    "ten": "/jokes/ten",
+    "types": "/types",
+    "byType": "/jokes",
+    "joke": "/jokes"
+  }
+}
