@@ -29,7 +29,8 @@ const {
   deckOfCards,
   chess,
   dragonBall,
-  digimon
+  digimon,
+  openTrivia,
 } = require("./dependencyMap");
 
 const app = express();
@@ -351,6 +352,12 @@ app.get("/digimon", async (req, res) => {
 app.get("/dragon-ball", async (req, res) => {
   const { type = "characters", value, ...query } = req.query;
   const data = await dragonBall.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/open-trivia", async (req, res) => {
+  const { operation = "questions", value, ...query } = req.query;
+  const data = await openTrivia.init({ operation, value, query});
   res.status(data.statusCode ?? 200).json(data);
 });
 

@@ -1,0 +1,10 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "questions": "/api.php",
+    "categories": "/api_category.php",
+    "categoryCount": "/api_count.php",
+    "globalCount": "/api_count_global.php",
+    "token": "/api_token.php"
+  }
+}

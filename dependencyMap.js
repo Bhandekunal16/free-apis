@@ -29,6 +29,7 @@ const DeckOfCards = require("./service/DeckOfCards");
 const Chess = require("./service/Chess");
 const Digimon = require("./service/Digimon");
 const DragonBall = require("./service/DragonBall");
+const OpenTrivia = require("./service/OpenTrivia");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -71,10 +72,11 @@ module.exports = {
   cocktailDB: new CocktailDB(),
   jokeAPI: new jokeAPI(),
   officialJoke: new OfficialJoke(),
-  randomUser : new RandomUser(),
-  bored : new Bored(),
-  deckOfCards : new DeckOfCards(),
-  chess : new Chess(),
-  dragonBall : new DragonBall(),
-  digimon : new Digimon()
+  randomUser: new RandomUser(),
+  bored: new Bored(),
+  deckOfCards: new DeckOfCards(),
+  chess: new Chess(),
+  dragonBall: new DragonBall(),
+  digimon: new Digimon(),
+  openTrivia: new OpenTrivia(),
 };
