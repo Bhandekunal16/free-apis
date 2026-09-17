@@ -1,0 +1,18 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "searchShows": "/search/shows",
+    "singleSearch": "/singlesearch/shows",
+    "lookupShow": "/lookup/shows",
+    "show": "/shows/{id}",
+    "showEpisodes": "/shows/{id}/episodes",
+    "showCast": "/shows/{id}/cast",
+    "showCrew": "/shows/{id}/crew",
+    "showSeasons": "/shows/{id}/seasons",
+    "episode": "/episodes/{id}",
+    "searchPeople": "/search/people",
+    "schedule": "/schedule",
+    "webSchedule": "/schedule/web",
+    "shows": "/shows"
+  }
+}

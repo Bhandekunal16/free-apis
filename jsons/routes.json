@@ -27,5 +27,6 @@
   "chess": "https://api.chess.com/pub",
   "digimon": "https://digi-api.com/api/v1",
   "dragonBall": "https://dragonball-api.com/api",
-  "openTrivia": "https://opentdb.com"
+  "openTrivia": "https://opentdb.com",
+  "tvMaze": "https://api.tvmaze.com"
 }

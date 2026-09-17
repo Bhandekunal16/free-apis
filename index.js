@@ -31,6 +31,7 @@ const {
   dragonBall,
   digimon,
   openTrivia,
+  tvMaze,
 } = require("./dependencyMap");
 
 const app = express();
@@ -357,7 +358,13 @@ app.get("/dragon-ball", async (req, res) => {
 
 app.get("/open-trivia", async (req, res) => {
   const { operation = "questions", value, ...query } = req.query;
-  const data = await openTrivia.init({ operation, value, query});
+  const data = await openTrivia.init({ operation, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/tv-maze", async (req, res) => {
+  const { type = "searchShows", value, ...query } = req.query;
+  const data = await tvMaze.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 
