@@ -1,0 +1,11 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "characters": "/characters",
+    "character": "/characters",
+    "planets": "/planets",
+    "planet": "/planets",
+    "transformations": "/transformations",
+    "transformation": "/transformations"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "digimon": "/digimon",
+    "attribute": "/attribute",
+    "field": "/field",
+    "level": "/level",
+    "type": "/type",
+    "skill": "/skill"
+  }
+}

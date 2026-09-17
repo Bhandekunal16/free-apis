@@ -27,6 +27,8 @@ const RandomUser = require("./service/RandomUser");
 const Bored = require("./service/Bored");
 const DeckOfCards = require("./service/DeckOfCards");
 const Chess = require("./service/Chess");
+const Digimon = require("./service/Digimon");
+const DragonBall = require("./service/DragonBall");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -72,5 +74,7 @@ module.exports = {
   randomUser : new RandomUser(),
   bored : new Bored(),
   deckOfCards : new DeckOfCards(),
-  chess : new Chess()
+  chess : new Chess(),
+  dragonBall : new DragonBall(),
+  digimon : new Digimon()
 };

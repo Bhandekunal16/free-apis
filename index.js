@@ -27,7 +27,9 @@ const {
   randomUser,
   bored,
   deckOfCards,
-  chess
+  chess,
+  dragonBall,
+  digimon
 } = require("./dependencyMap");
 
 const app = express();
@@ -337,6 +339,18 @@ app.get("/chess", async (req, res) => {
     query,
   });
 
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/digimon", async (req, res) => {
+  const { type = "digimon", value, ...query } = req.query;
+  const data = await digimon.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/dragon-ball", async (req, res) => {
+  const { type = "characters", value, ...query } = req.query;
+  const data = await dragonBall.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

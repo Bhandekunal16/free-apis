@@ -24,5 +24,7 @@
   "randomUser": "https://randomuser.me/api",
   "bored": "https://bored-api.appbrewery.com",
   "deckOfCards": "https://deckofcardsapi.com/api/deck",
-  "chess": "https://api.chess.com/pub"
+  "chess": "https://api.chess.com/pub",
+  "digimon": "https://digi-api.com/api/v1",
+  "dragonBall": "https://dragonball-api.com/api"
 }
