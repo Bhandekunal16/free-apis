@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides eighteen API groups:
+The project currently provides nineteen API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -22,6 +22,7 @@ The project currently provides eighteen API groups:
 * **Open Library API** — consumes [Open Library](https://openlibrary.org/)
 * **Gutenberg API** — consumes [Gutenberg Project API](https://gutendex.com/)
 * **Open Food Facts API** — consumes [Open Food Facts](https://world.openfoodfacts.org/)
+* **BallDontLie API** — consumes [BallDontLie NBA API](https://docs.balldontlie.io/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
 
@@ -48,6 +49,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Book, author, edition, subject, and ISBN metadata via Open Library
 * Public domain book metadata and catalog search via Gutendex
 * Food product, category, brand, country, ingredient, additive, allergen, label, and packaging data via Open Food Facts
+* NBA teams, players, games, statistics, standings, and related data via BallDontLie
 * Resource validation
 * ID-based resource access
 * Nested resource access
@@ -127,9 +129,21 @@ Example:
   "github": "https://api.github.com",
   "openLibrary": "https://openlibrary.org",
   "gutendex": "https://gutendex.com",
-  "openFoodFacts": "https://world.openfoodfacts.org/api/v2"
+  "openFoodFacts": "https://world.openfoodfacts.org/api/v2",
+  "balldontlie": "https://api.balldontlie.io/v1"
 }
 ```
+
+BallDontLie authentication is configured in `jsons/ballDontLie.json`:
+
+```json
+{
+  "defaultTimeout": 15000,
+  "key": "YOUR_BALLDONTLIE_API_KEY"
+}
+```
+
+Keep the API key private and do not commit a real key to source control.
 
 ---
 
@@ -145,6 +159,7 @@ free-apis/
 ├── jsons/
 │   ├── agify.json
 │   ├── app.json
+│   ├── ballDontLie.json
 │   ├── catFacts.json
 │   ├── coingecko.json
 │   ├── dogApi.json
@@ -166,6 +181,7 @@ free-apis/
 │
 ├── service/
 │   ├── agify.js
+│   ├── BallDontLie.js
 │   ├── catFacts.js
 │   ├── coingecko.js
 │   ├── dogApi.js
@@ -778,6 +794,54 @@ GET /open-food-facts?type=packaging
 
 The service applies a 15-second upstream timeout. Unsupported types and missing
 required `value` for the `product` endpoint return `400`.
+
+---
+
+## BallDontLie API
+
+The `/ball-dont-lie` endpoint consumes NBA data from BallDontLie. The upstream
+base URL is `https://api.balldontlie.io/v1`, and the API key is read from
+`jsons/ballDontLie.json`.
+
+The `operation` parameter defaults to `games`. Supported operations are:
+
+| Operation | Upstream path | Description |
+| --- | --- | --- |
+| `teams` | `/teams` | List teams |
+| `team` | `/teams/{id}` | Get a team by ID |
+| `players` | `/players` | List or search players |
+| `player` | `/players/{id}` | Get a player by ID |
+| `activePlayers` | `/players/active` | List active players |
+| `games` | `/games` | List games |
+| `game` | `/games/{id}` | Get a game by ID |
+| `stats` | `/stats` | Get player game statistics |
+| `seasonAverages` | `/season_averages` | Get season averages |
+| `standings` | `/standings` | Get standings |
+| `divisions` | `/divisions` | List divisions |
+| `conferences` | `/conferences` | List conferences |
+| `gameOdds` | `/odds` | Get game odds, subject to account access |
+| `playerProps` | `/player_props` | Get player props, subject to account access |
+| `plays` | `/plays` | Get play-by-play data, subject to account access |
+
+Examples:
+
+```http
+GET /ball-dont-lie
+GET /ball-dont-lie?operation=teams
+GET /ball-dont-lie?operation=team&id=1
+GET /ball-dont-lie?operation=players&search=LeBron
+GET /ball-dont-lie?operation=activePlayers&per_page=25
+GET /ball-dont-lie?operation=games&seasons[]=2025&per_page=25
+GET /ball-dont-lie?operation=game&id=12345
+GET /ball-dont-lie?operation=stats&seasons[]=2025&player_ids[]=115
+GET /ball-dont-lie?operation=seasonAverages&season=2025&player_id=115
+GET /ball-dont-lie?operation=standings&season=2025
+```
+
+`id` is required for the `team`, `player`, and `game` operations. Other query
+parameters are forwarded to the selected upstream endpoint. Paginated
+operations may return `meta.next_cursor`; pass it as `cursor` to request the
+next page. Availability depends on the BallDontLie account tier.
 
 ---
 

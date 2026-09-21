@@ -163,6 +163,27 @@ Express
            │
            ▼
     Open Food Facts API
+
+    /ball-dont-lie
+           │
+           ▼
+       BallDontLie
+           │
+           ├── /teams
+           ├── /players
+           ├── /players/active
+           ├── /games
+           ├── /stats
+           ├── /season_averages
+           ├── /standings
+           ├── /divisions
+           ├── /conferences
+           ├── /odds
+           ├── /player_props
+           └── /plays
+           │
+           ▼
+    BallDontLie NBA API
 ```
 
 The application follows a simple controller/service architecture.
@@ -1430,6 +1451,94 @@ parameters are forwarded to the selected Open Food Facts endpoint. The service
 uses the configured 15-second timeout.
 
 ---
+
+# BallDontLie Service
+
+File:
+
+```text
+service/BallDontLie.js
+```
+
+Class:
+
+```js
+BallDontLie
+```
+
+The BallDontLie service consumes NBA data from
+`https://api.balldontlie.io/v1`. Its API key and endpoint mappings are loaded
+from:
+
+```text
+jsons/ballDontLie.json
+```
+
+The key is sent in the upstream `Authorization` header. Configure it in JSON:
+
+```json
+{
+  "defaultTimeout": 15000,
+  "key": "YOUR_BALLDONTLIE_API_KEY",
+  "endpoints": {
+    "teams": "/teams",
+    "team": "/teams/{id}",
+    "players": "/players",
+    "player": "/players/{id}",
+    "activePlayers": "/players/active",
+    "games": "/games",
+    "game": "/games/{id}",
+    "stats": "/stats",
+    "seasonAverages": "/season_averages",
+    "standings": "/standings",
+    "divisions": "/divisions",
+    "conferences": "/conferences",
+    "gameOdds": "/odds",
+    "playerProps": "/player_props",
+    "plays": "/plays"
+  }
+}
+```
+
+## `init()`
+
+```js
+async init({ operation = "games", id, ...query })
+```
+
+Validates the operation, substitutes `id` into configured resource paths,
+forwards scalar and array query parameters, performs the upstream request, and
+returns a standardized response containing `success`, `statusCode`,
+`statusText`, `contentType`, `url`, and `data`.
+
+Examples:
+
+```js
+await ballDontlie.init({
+  operation: "players",
+  search: "LeBron"
+});
+
+await ballDontlie.init({
+  operation: "stats",
+  seasons: ["2025"],
+  player_ids: ["115"]
+});
+```
+
+The public controller maps the service to:
+
+```http
+GET /ball-dont-lie
+GET /ball-dont-lie?operation=players&search=LeBron
+GET /ball-dont-lie?operation=stats&seasons[]=2025&player_ids[]=115
+```
+
+The default operation is `games`. Operations with `{id}` require `id`.
+Unsupported operations and missing IDs return `400`; a missing JSON API key
+returns `500`. The service applies the configured 15-second timeout and
+propagates the upstream status code and response data. Endpoint access can
+depend on the BallDontLie account tier.
 
 # MockData Service
 
