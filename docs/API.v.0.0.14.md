@@ -2811,7 +2811,154 @@ service response envelope.
 
 ---
 
-# 35. Route Summary
+# 35. OpenF1 API
+
+The OpenF1 API provides Formula 1 data including sessions, meetings, drivers,
+laps, car data, intervals, location, pit stops, positions, race control,
+starting grids, stints, team radio, weather, session results, and overtakes.
+
+Configured upstream API:
+
+```text
+https://api.openf1.org/v1
+```
+
+## Get OpenF1 Data
+
+```http
+GET /open-f1
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `operation` | No | Local operation; defaults to `sessions` |
+| Endpoint-specific filters | No | Forwarded to OpenF1, such as `session_key`, `meeting_key`, `driver_number`, `year`, and `date` |
+
+### Supported Operations
+
+| Operation | Upstream path | Description |
+| --------- | ------------- | ----------- |
+| `carData` | `/car_data` | Get car telemetry data |
+| `drivers` | `/drivers` | Get driver information |
+| `intervals` | `/intervals` | Get driver intervals |
+| `laps` | `/laps` | Get lap data |
+| `location` | `/location` | Get car location data |
+| `meetings` | `/meetings` | Get meeting information |
+| `pit` | `/pit` | Get pit-stop data |
+| `position` | `/position` | Get driver position data |
+| `raceControl` | `/race_control` | Get race-control messages |
+| `sessions` | `/sessions` | Get session information |
+| `sessionResult` | `/session_result` | Get session results |
+| `startingGrid` | `/starting_grid` | Get starting-grid data |
+| `stints` | `/stints` | Get tyre stint data |
+| `teamRadio` | `/team_radio` | Get team radio records |
+| `weather` | `/weather` | Get session weather data |
+| `overtakes` | `/overtakes` | Get overtaking records |
+
+### Examples
+
+```http
+GET /open-f1
+GET /open-f1?operation=sessions&year=2026
+GET /open-f1?operation=meetings&year=2026
+GET /open-f1?operation=drivers&session_key=latest
+GET /open-f1?operation=laps&session_key=latest&driver_number=1
+GET /open-f1?operation=weather&session_key=latest
+GET /open-f1?operation=pit&session_key=latest
+GET /open-f1?operation=raceControl&session_key=latest
+GET /open-f1?operation=carData&session_key=latest&driver_number=1
+GET /open-f1?operation=intervals&session_key=latest
+GET /open-f1?operation=position&session_key=latest
+GET /open-f1?operation=teamRadio&session_key=latest
+GET /open-f1?operation=overtakes&session_key=latest
+```
+
+The default operation is `sessions`. The local `operation` parameter selects
+the upstream endpoint; other query parameters are forwarded as filters.
+Invalid operation names return `400`. Historical data access and real-time
+access may have different availability or subscription requirements.
+
+---
+
+# 36. BallDontLie API
+
+The BallDontLie API provides NBA data, including teams, players, games, player
+statistics, season averages, standings, and other basketball resources.
+
+Configured upstream API:
+
+```text
+https://api.balldontlie.io/v1
+```
+
+## Authentication
+
+Set `BALLDONTLIE_API_KEY` in your environment. The service sends it using the
+`Authorization` request header. Do not expose the key in client-side code or
+commit it to source control.
+
+## Get BallDontLie Data
+
+```http
+GET /ball-dont-lie
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `operation` | No | Operation name; defaults to `games` |
+| `id` | Conditional | Resource ID for operations such as `team`, `player`, or `game` |
+| `per_page` | No | Page size where supported |
+| `cursor` | No | Pagination cursor returned by the API |
+| Other parameters | No | Endpoint-specific filters forwarded to BallDontLie |
+
+### Supported Operations
+
+| Operation | Upstream path | Description |
+| --------- | ------------- | ----------- |
+| `teams` | `/teams` | List teams |
+| `team` | `/teams/{id}` | Get a team by ID |
+| `players` | `/players` | List/search players |
+| `player` | `/players/{id}` | Get a player by ID |
+| `activePlayers` | `/players/active` | List active players |
+| `games` | `/games` | List games |
+| `game` | `/games/{id}` | Get a game by ID |
+| `stats` | `/stats` | Get player game statistics |
+| `seasonAverages` | `/season_averages` | Get season averages |
+| `standings` | `/standings` | Get standings |
+| `divisions` | `/divisions` | List divisions |
+| `conferences` | `/conferences` | List conferences |
+| `gameOdds` | `/odds` | Get game odds, subject to account access |
+| `playerProps` | `/player_props` | Get player props, subject to account access |
+| `plays` | `/plays` | Get play-by-play data, subject to account access |
+
+### Examples
+
+```http
+GET /ball-dont-lie
+GET /ball-dont-lie?operation=teams
+GET /ball-dont-lie?operation=team&id=1
+GET /ball-dont-lie?operation=players&search=LeBron
+GET /ball-dont-lie?operation=activePlayers&per_page=25
+GET /ball-dont-lie?operation=games&seasons[]=2025&per_page=25
+GET /ball-dont-lie?operation=game&id=12345
+GET /ball-dont-lie?operation=stats&seasons[]=2025&player_ids[]=115
+GET /ball-dont-lie?operation=seasonAverages&season=2025&player_id=115
+GET /ball-dont-lie?operation=standings&season=2025
+```
+
+The default operation is `games`. Operations using an ID require `id`.
+Other query parameters are forwarded to the selected upstream endpoint.
+Paginated endpoints may return a `meta.next_cursor`; pass it as `cursor` to
+retrieve the next page. Endpoint availability and filters may depend on the
+BallDontLie account tier.
+
+---
+
+# 37. Route Summary
 
 | Method | Route                      | Purpose                     |
 | ------ | -------------------------- | --------------------------- |
@@ -2843,6 +2990,7 @@ service response envelope.
 | `GET`  | `/open-trivia`             | Open Trivia DB questions and metadata |
 | `GET`  | `/tv-maze`                 | TVmaze show and episode lookup |
 | `GET`  | `/studio-ghibli`           | Studio Ghibli resource lookup |
+| `GET`  | `/open-f1`                | OpenF1 Formula 1 data lookup |\n| `GET`  | `/ball-dont-lie`          | BallDontLie basketball data lookup |
 | `GET`  | `/official-joke`         | Official Joke API lookup     |
 | `GET`  | `/meal-db`                 | TheMealDB meal lookup       |
 | `GET`  | `/joke-api`              | Joke lookup and filtering      |

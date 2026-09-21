@@ -30,5 +30,6 @@
   "openTrivia": "https://opentdb.com",
   "tvMaze": "https://api.tvmaze.com",
   "studioGhibli": "https://ghibliapi.vercel.app",
-  "openF1": "https://api.openf1.org/v1"
+  "openF1": "https://api.openf1.org/v1",
+  "balldontlie": "https://api.balldontlie.io/v1"
 }

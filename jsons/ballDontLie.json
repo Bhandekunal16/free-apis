@@ -1,0 +1,21 @@
+{
+  "defaultTimeout": 15000,
+  "key": "735bc0ff-3310-4a4a-b653-2a66608c2d67",
+  "endpoints": {
+    "teams": "/teams",
+    "team": "/teams/{id}",
+    "players": "/players",
+    "player": "/players/{id}",
+    "activePlayers": "/players/active",
+    "games": "/games",
+    "game": "/games/{id}",
+    "stats": "/stats",
+    "seasonAverages": "/season_averages",
+    "standings": "/standings",
+    "divisions": "/divisions",
+    "conferences": "/conferences",
+    "gameOdds": "/odds",
+    "playerProps": "/player_props",
+    "plays": "/plays"
+  }
+}

@@ -33,7 +33,8 @@ const {
   openTrivia,
   tvMaze,
   studioGhibli,
-  openF1
+  openF1,
+  ballDontlie,
 } = require("./dependencyMap");
 
 const app = express();
@@ -379,6 +380,12 @@ app.get("/studio-ghibli", async (req, res) => {
 app.get("/open-f1", async (req, res) => {
   const { operation = "sessions", ...query } = req.query;
   const result = await openF1.init({ operation, ...query });
+  res.status(result.statusCode).json(result);
+});
+
+app.get("/ball-dont-lie", async (req, res) => {
+  const { operation = "games", id, ...query } = req.query;
+  const result = await ballDontlie.init({operation, id, ...query});
   res.status(result.statusCode).json(result);
 });
 
