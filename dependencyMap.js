@@ -31,6 +31,7 @@ const Digimon = require("./service/Digimon");
 const DragonBall = require("./service/DragonBall");
 const OpenTrivia = require("./service/OpenTrivia");
 const TvMaze = require("./service/TvMaze");
+const StudioGhibli = require("./service/StudioGhibli");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -80,5 +81,6 @@ module.exports = {
   dragonBall: new DragonBall(),
   digimon: new Digimon(),
   openTrivia: new OpenTrivia(),
-  tvMaze : new TvMaze()
+  tvMaze: new TvMaze(),
+  studioGhibli : new StudioGhibli()
 };

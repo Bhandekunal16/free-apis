@@ -32,6 +32,7 @@ const {
   digimon,
   openTrivia,
   tvMaze,
+  studioGhibli,
 } = require("./dependencyMap");
 
 const app = express();
@@ -365,6 +366,12 @@ app.get("/open-trivia", async (req, res) => {
 app.get("/tv-maze", async (req, res) => {
   const { type = "searchShows", value, ...query } = req.query;
   const data = await tvMaze.init({ type, value, query });
+  res.status(data.statusCode ?? 200).json(data);
+});
+
+app.get("/studio-ghibli", async (req, res) => {
+  const { type = "films", value, ...query } = req.query;
+  const data = await studioGhibli.init({ type, value, query });
   res.status(data.statusCode ?? 200).json(data);
 });
 

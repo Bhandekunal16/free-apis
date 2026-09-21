@@ -1,0 +1,15 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "films": "/films",
+    "film": "/films/{id}",
+    "people": "/people",
+    "person": "/people/{id}",
+    "locations": "/locations",
+    "location": "/locations/{id}",
+    "species": "/species",
+    "specie": "/species/{id}",
+    "vehicles": "/vehicles",
+    "vehicle": "/vehicles/{id}"
+  }
+}
