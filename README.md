@@ -2,7 +2,7 @@
 
 A lightweight Node.js/Express service for consuming and exposing free public APIs through a unified local API.
 
-The project currently provides nineteen API groups:
+The project currently provides thirty-three API groups:
 
 * **Fake API** — consumes [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
 * **Mock API** — consumes [DummyJSON](https://dummyjson.com/)
@@ -22,6 +22,20 @@ The project currently provides nineteen API groups:
 * **Open Library API** — consumes [Open Library](https://openlibrary.org/)
 * **Gutenberg API** — consumes [Gutenberg Project API](https://gutendex.com/)
 * **Open Food Facts API** — consumes [Open Food Facts](https://world.openfoodfacts.org/)
+* **TheMealDB API** — consumes [TheMealDB](https://www.themealdb.com/)
+* **TheCocktailDB API** — consumes [TheCocktailDB](https://www.thecocktaildb.com/)
+* **JokeAPI** — consumes [JokeAPI](https://jokeapi.dev/)
+* **Official Joke API** — consumes [Official Joke API](https://official-joke-api.appspot.com/)
+* **Random User API** — consumes [Random User](https://randomuser.me/)
+* **Bored API** — consumes [Bored API](https://bored-api.appbrewery.com/)
+* **Deck of Cards API** — consumes [Deck of Cards API](https://deckofcardsapi.com/)
+* **Chess.com API** — consumes [Chess.com Public API](https://www.chess.com/news/view/published-data-api)
+* **Digimon API** — consumes [Digimon API](https://digi-api.com/)
+* **Dragon Ball API** — consumes [Dragon Ball API](https://web.dragonball-api.com/)
+* **Open Trivia DB API** — consumes [Open Trivia DB](https://opentdb.com/)
+* **TVmaze API** — consumes [TVmaze](https://www.tvmaze.com/api)
+* **Studio Ghibli API** — consumes [Studio Ghibli API](https://ghibliapi.vercel.app/)
+* **OpenF1 API** — consumes [OpenF1](https://openf1.org/)
 * **BallDontLie API** — consumes [BallDontLie NBA API](https://docs.balldontlie.io/)
 
 The service acts as a simple API gateway/proxy layer, providing a consistent local endpoint structure while forwarding requests to external APIs.
@@ -49,6 +63,7 @@ The service acts as a simple API gateway/proxy layer, providing a consistent loc
 * Book, author, edition, subject, and ISBN metadata via Open Library
 * Public domain book metadata and catalog search via Gutendex
 * Food product, category, brand, country, ingredient, additive, allergen, label, and packaging data via Open Food Facts
+* Meal, recipe, cocktail, joke, random-user, activity, card, chess, trivia, television, animation, motorsport, Digimon, and Dragon Ball data
 * NBA teams, players, games, statistics, standings, and related data via BallDontLie
 * Resource validation
 * ID-based resource access
@@ -130,6 +145,20 @@ Example:
   "openLibrary": "https://openlibrary.org",
   "gutendex": "https://gutendex.com",
   "openFoodFacts": "https://world.openfoodfacts.org/api/v2",
+  "mealDB": "https://www.themealdb.com/api/json/v1/1",
+  "cocktailDB": "https://www.thecocktaildb.com/api/json/v1/1",
+  "jokeAPI": "https://v2.jokeapi.dev",
+  "officialJoke": "https://official-joke-api.appspot.com",
+  "randomUser": "https://randomuser.me/api",
+  "bored": "https://bored-api.appbrewery.com",
+  "deckOfCards": "https://deckofcardsapi.com/api/deck",
+  "chess": "https://api.chess.com/pub",
+  "digimon": "https://digi-api.com/api/v1",
+  "dragonBall": "https://dragonball-api.com/api",
+  "openTrivia": "https://opentdb.com",
+  "tvMaze": "https://api.tvmaze.com",
+  "studioGhibli": "https://ghibliapi.vercel.app",
+  "openF1": "https://api.openf1.org/v1",
   "balldontlie": "https://api.balldontlie.io/v1"
 }
 ```
@@ -174,14 +203,38 @@ free-apis/
 │   ├── openFoodFacts.json
 │   ├── openLibrary.json
 │   ├── openMeteo.json
+│   ├── mealDB.json
+│   ├── cocktailDB.json
+│   ├── jokeAPI.json
+│   ├── officialJoke.json
+│   ├── randomUser.json
+│   ├── bored.json
+│   ├── deckOfCards.json
+│   ├── chess.json
+│   ├── digimon.json
+│   ├── dragonBall.json
+│   ├── openTrivia.json
+│   ├── tvMaze.json
+│   ├── studioGhibli.json
+│   ├── openF1.jsonon
 │   ├── pokemon.json
 │   ├── restCountries.json
 │   ├── rickAndMorty.json
+│   ├── OpenF1.js
+│   ├── OpenTrivia.js
+│   ├── StudioGhibli.js
+│   ├── TvMaze.json
 │   └── routes.json
 │
 ├── service/
 │   ├── agify.js
 │   ├── BallDontLie.js
+│   ├── Bored.js
+│   ├── Chess.js
+│   ├── CocktailDB.js
+│   ├── DeckOfCards.js
+│   ├── Digimon.js
+│   ├── DragonBall.js
 │   ├── catFacts.js
 │   ├── coingecko.js
 │   ├── dogApi.js
@@ -189,15 +242,19 @@ free-apis/
 │   ├── genderize.js
 │   ├── github.js
 │   ├── gutendex.js
+│   ├── JokeAPI.js
+│   ├── MealDB.js
 │   ├── ipify.js
 │   ├── jikan.js
 │   ├── mockData.js
 │   ├── nationalize.js
+│   ├── OfficialJoke.js
 │   ├── openFoodFacts.js
 │   ├── openLibrary.js
 │   ├── OpenMeteo.js
 │   ├── pokemon.js
 │   ├── restCountries.js
+│   ├── RandomUser.js
 │   └── rickAndMorty.js
 │
 ├── .gitignore
@@ -842,6 +899,283 @@ GET /ball-dont-lie?operation=standings&season=2025
 parameters are forwarded to the selected upstream endpoint. Paginated
 operations may return `meta.next_cursor`; pass it as `cursor` to request the
 next page. Availability depends on the BallDontLie account tier.
+
+---
+
+## Open Library API
+
+The `/open-library` endpoint provides book and library metadata. The default
+type is `search`; supported types are `search`, `work`, `author`, `edition`,
+`subject`, and `isbn`.
+
+```http
+GET /open-library
+GET /open-library?type=search&q=harry%20potter
+GET /open-library?type=work&value=OL45804W
+GET /open-library?type=author&value=OL23919A
+GET /open-library?type=isbn&value=9780140328721
+```
+
+## Gutendex API
+
+The `/gutendex` endpoint provides public-domain book metadata. The default
+type is `books`; supported types are `books` and `book`.
+
+```http
+GET /gutendex
+GET /gutendex?type=books&search=frankenstein
+GET /gutendex?type=books&page=2
+GET /gutendex?type=book&value=84
+```
+
+## TheMealDB API
+
+The `/meal-db` endpoint provides meals and recipes. The default type is
+`random`; supported types are `random`, `randomSelection`, `lookup`, `search`,
+`filter`, `categories`, `areas`, and `ingredients`.
+
+```http
+GET /meal-db
+GET /meal-db?type=randomSelection
+GET /meal-db?type=lookup&value=52772
+GET /meal-db?type=search&value=Arrabiata
+GET /meal-db?type=filter&category=Seafood
+GET /meal-db?type=filter&area=Indian
+GET /meal-db?type=filter&ingredient=Chicken
+GET /meal-db?type=categories
+GET /meal-db?type=areas
+GET /meal-db?type=ingredients
+```
+
+## TheCocktailDB API
+
+The `/cocktail-db` endpoint provides cocktail recipes and filters. The default
+type is `random`; supported types are `random`, `randomMultiple`, `lookup`,
+`search`, `filter`, `categories`, `glass`, `ingredients`, and `alcoholic`.
+
+```http
+GET /cocktail-db
+GET /cocktail-db?type=randomMultiple
+GET /cocktail-db?type=lookup&value=11007
+GET /cocktail-db?type=search&value=margarita
+GET /cocktail-db?type=filter&ingredient=Gin
+GET /cocktail-db?type=filter&category=Cocktail
+GET /cocktail-db?type=filter&alcoholic=Alcoholic
+GET /cocktail-db?type=filter&glass=Cocktail_glass
+GET /cocktail-db?type=categories
+GET /cocktail-db?type=glass
+GET /cocktail-db?type=ingredients
+GET /cocktail-db?type=alcoholic
+```
+
+## JokeAPI
+
+The `/joke-api` endpoint provides jokes. The default type is `random`;
+supported types are `random`, `joke`, `category`, `categories`, and `filter`.
+JokeAPI parameters such as `amount`, `blacklistFlags`, `safe`, and `lang` are
+forwarded.
+
+```http
+GET /joke-api
+GET /joke-api?type=random&value=Programming
+GET /joke-api?type=category&value=Programming
+GET /joke-api?type=categories&value=Programming,Misc
+GET /joke-api?type=filter&value=Programming&blacklistFlags=nsfw,religious&safe=true
+GET /joke-api?type=joke&value=123
+```
+
+## Official Joke API
+
+The `/official-joke` endpoint provides jokes. The default type is `random`;
+supported types are `random`, `randomTen`, `ten`, `randomMultiple`, `types`,
+`byType`, and `joke`.
+
+```http
+GET /official-joke
+GET /official-joke?type=randomTen
+GET /official-joke?type=ten
+GET /official-joke?type=randomMultiple&value=5
+GET /official-joke?type=types
+GET /official-joke?type=byType&value=programming&mode=ten
+GET /official-joke?type=joke&value=1
+```
+
+## Random User API
+
+The `/random-user` endpoint generates random profiles. The default type is
+`random`; `results`, `gender`, `nat`, `seed`, `page`, `inc`, `exc`, `format`,
+and `noinfo` are forwarded to the upstream API.
+
+```http
+GET /random-user
+GET /random-user?results=10&nat=in
+GET /random-user?gender=female
+GET /random-user?results=10&inc=name,email,picture
+GET /random-user?results=10&seed=foobar&page=2
+```
+
+## Bored API
+
+The `/bored` endpoint provides activities. The local `operation` defaults to
+`random`; supported operations are `random`, `filter`, and `activity`.
+
+```http
+GET /bored
+GET /bored?operation=filter&type=education
+GET /bored?operation=filter&participants=2
+GET /bored?operation=activity&value=3943506
+```
+
+## Deck of Cards API
+
+The `/deck-of-cards` endpoint manages card decks. The default operation is
+`newShuffle`; supported operations are `new`, `newShuffle`, `draw`, `shuffle`,
+`return`, `pileAdd`, `pileShuffle`, `pileList`, `pileDraw`, and `pileReturn`.
+
+```http
+GET /deck-of-cards
+GET /deck-of-cards?operation=new
+GET /deck-of-cards?operation=newShuffle&deckCount=2
+GET /deck-of-cards?operation=draw&deckId=3p40paa87x90&count=2
+GET /deck-of-cards?operation=shuffle&deckId=3p40paa87x90&remaining=true
+GET /deck-of-cards?operation=pileAdd&deckId=3p40paa87x90&pileName=discard&cards=AS,2S
+GET /deck-of-cards?operation=pileDraw&deckId=3p40paa87x90&pileName=discard&count=2
+```
+
+Existing-deck operations require `deckId`; pile operations require
+`deckId` and `pileName`.
+
+## Chess.com Public API
+
+The `/chess` endpoint provides Chess.com player, club, country, puzzle,
+leaderboard, titled-player, streamer, and game data. The default type is
+`dailyPuzzle`.
+
+Supported types are `dailyPuzzle`, `randomPuzzle`, `puzzle`, `player`,
+`playerStats`, `playerArchives`, `playerGames`, `club`, `clubMembers`,
+`clubMatches`, `country`, `countryPlayers`, `countryClubs`, `titled`,
+`leaderboards`, and `streamers`.
+
+```http
+GET /chess
+GET /chess?type=randomPuzzle
+GET /chess?type=player&username=hikaru
+GET /chess?type=playerStats&username=hikaru
+GET /chess?type=playerGames&username=hikaru&year=2026&month=08
+GET /chess?type=countryPlayers&country=IN
+GET /chess?type=titled&title=GM
+GET /chess?type=leaderboards
+GET /chess?type=streamers
+GET /chess?type=clubMembers&club=chess-com
+```
+
+## Digimon API
+
+The `/digimon` endpoint provides Digimon data, attributes, fields, levels,
+types, and skills. The default type is `digimon`; supported types are
+`digimon`, `attribute`, `field`, `level`, `type`, and `skill`.
+
+```http
+GET /digimon
+GET /digimon?type=digimon&value=Agumon
+GET /digimon?type=digimon&name=Agumon&level=Rookie
+GET /digimon?type=digimon&page=2&pageSize=20
+GET /digimon?type=attribute
+GET /digimon?type=skill&value=1
+```
+
+## Dragon Ball API
+
+The `/dragon-ball` endpoint provides characters, planets, and transformations.
+The default type is `characters`; supported types are `characters`, `character`,
+`planets`, `planet`, `transformations`, and `transformation`.
+
+```http
+GET /dragon-ball
+GET /dragon-ball?type=characters&page=2&limit=10
+GET /dragon-ball?type=characters&name=Goku&race=Saiyan
+GET /dragon-ball?type=character&value=1
+GET /dragon-ball?type=planets&isDestroyed=true
+GET /dragon-ball?type=planet&value=1
+GET /dragon-ball?type=transformations
+GET /dragon-ball?type=transformation&value=1
+```
+
+## Open Trivia DB API
+
+The `/open-trivia` endpoint provides trivia questions and metadata. The local
+`operation` defaults to `questions`; supported operations are `questions`,
+`categories`, `categoryCount`, `globalCount`, and `token`.
+
+```http
+GET /open-trivia
+GET /open-trivia?operation=questions&amount=10&difficulty=easy&type=multiple
+GET /open-trivia?operation=questions&category=18&type=boolean
+GET /open-trivia?operation=categories
+GET /open-trivia?operation=categoryCount&value=18
+GET /open-trivia?operation=globalCount
+GET /open-trivia?operation=token
+GET /open-trivia?operation=token&command=reset&token=YOUR_TOKEN
+```
+
+## TVmaze API
+
+The `/tv-maze` endpoint provides shows, episodes, cast, crew, people, and
+schedules. The default type is `searchShows`; supported types are
+`searchShows`, `singleSearch`, `lookupShow`, `show`, `showEpisodes`,
+`showCast`, `showCrew`, `showSeasons`, `episode`, `searchPeople`, `schedule`,
+`webSchedule`, and `shows`.
+
+```http
+GET /tv-maze
+GET /tv-maze?type=searchShows&q=breaking%20bad
+GET /tv-maze?type=singleSearch&q=friends
+GET /tv-maze?type=lookupShow&imdb=tt0944947
+GET /tv-maze?type=show&value=82
+GET /tv-maze?type=showEpisodes&value=82
+GET /tv-maze?type=searchPeople&q=lauren
+GET /tv-maze?type=schedule&country=US&date=2026-09-17
+GET /tv-maze?type=shows&page=1
+```
+
+## Studio Ghibli API
+
+The `/studio-ghibli` endpoint provides films, people, locations, species, and
+vehicles. The default type is `films`; supported types are `films`, `film`,
+`people`, `person`, `locations`, `location`, `species`, `specie`, `vehicles`,
+and `vehicle`.
+
+```http
+GET /studio-ghibli
+GET /studio-ghibli?type=film&value=FILM_ID
+GET /studio-ghibli?type=people
+GET /studio-ghibli?type=person&value=PERSON_ID
+GET /studio-ghibli?type=locations
+GET /studio-ghibli?type=species
+GET /studio-ghibli?type=vehicle&value=VEHICLE_ID
+```
+
+## OpenF1 API
+
+The `/open-f1` endpoint provides Formula 1 sessions, meetings, drivers, laps,
+telemetry, intervals, locations, pit stops, positions, race control, starting
+grids, stints, team radio, weather, results, and overtakes. The local
+`operation` defaults to `sessions`; filters such as `session_key`,
+`meeting_key`, `driver_number`, `year`, and `date` are forwarded.
+
+Supported operations are `carData`, `drivers`, `intervals`, `laps`, `location`,
+`meetings`, `overtakes`, `pit`, `position`, `raceControl`, `sessions`,
+`startingGrid`, `stints`, `teamRadio`, `weather`, and `sessionResult`.
+
+```http
+GET /open-f1
+GET /open-f1?operation=sessions&year=2025
+GET /open-f1?operation=meetings&year=2025
+GET /open-f1?operation=drivers&session_key=latest
+GET /open-f1?operation=laps&session_key=latest&driver_number=1
+GET /open-f1?operation=weather&session_key=latest
+GET /open-f1?operation=position&session_key=latest
+```
 
 ---
 
