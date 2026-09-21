@@ -32,6 +32,7 @@ const DragonBall = require("./service/DragonBall");
 const OpenTrivia = require("./service/OpenTrivia");
 const TvMaze = require("./service/TvMaze");
 const StudioGhibli = require("./service/StudioGhibli");
+const OpenF1 = require("./service/OpenF1");
 
 const restCountries = new RestCountries();
 const fakeData = new faker();
@@ -50,6 +51,7 @@ const nationalize = new Nationalize();
 const github = new Github();
 const openLibrary = new OpenLibrary();
 const gutendex = new Gutendex();
+
 
 module.exports = {
   github,
@@ -82,5 +84,6 @@ module.exports = {
   digimon: new Digimon(),
   openTrivia: new OpenTrivia(),
   tvMaze: new TvMaze(),
-  studioGhibli : new StudioGhibli()
+  studioGhibli : new StudioGhibli(),
+  openF1 : new OpenF1()
 };

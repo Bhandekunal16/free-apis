@@ -1,0 +1,21 @@
+{
+  "defaultTimeout": 15000,
+  "endpoints": {
+    "carData": "/car_data",
+    "drivers": "/drivers",
+    "intervals": "/intervals",
+    "laps": "/laps",
+    "location": "/location",
+    "meetings": "/meetings",
+    "pit": "/pit",
+    "position": "/position",
+    "raceControl": "/race_control",
+    "sessions": "/sessions",
+    "sessionResult": "/session_result",
+    "startingGrid": "/starting_grid",
+    "stints": "/stints",
+    "teamRadio": "/team_radio",
+    "weather": "/weather",
+    "overtakes": "/overtakes"
+  }
+}
